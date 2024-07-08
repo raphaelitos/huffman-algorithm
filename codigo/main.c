@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TAM_ASCII 256
+#define TAM_ASCII 128
 
 int *IniciaVetAscII(){
     int *vet = (int*)calloc(TAM_ASCII, sizeof(int));
@@ -13,8 +13,10 @@ int *IniciaVetAscII(){
 void ContaFreqCaracteres(int *vet, char *path){
     FILE *arq = fopen(path, "r");
     if(!arq) exit(EXIT_FAILURE);
+    
     int c = 0;
     char ch = '\0';
+    
     while(1){
         c = fgetc(arq);
         if(c == EOF) break;
@@ -29,7 +31,7 @@ void PrintVetInt(int *vet, int tam){
     printf("[ ");
     for(int i = 0; i < tam; i++){
         if(vet[i]){
-            printf("%c ", (char)i);
+            printf("%c ", (unsigned char)i);
         }
     }
     printf("]");
