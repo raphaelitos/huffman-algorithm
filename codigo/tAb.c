@@ -10,8 +10,15 @@ struct ab{
     int freq;
 };
 
-tAb *criaAb(){
-    tAb *nova = NULL;
+tAb *criaAb(char caractere, int frequencia, tAb *sae, tAb *sad){
+    tAb *nova = (tAb*)calloc(1, sizeof(tAb));
+    if(!nova)TratarFalhaAlocacao("arvore binaria");
+    
+    nova->ch = caractere;
+    nova->freq = frequencia;
+    nova->sad = sad;
+    nova->sae = sae;
+    
     return nova;
 }
 
