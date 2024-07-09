@@ -11,6 +11,4 @@ void DesalocaLista(tLista* l);
 
 void InsereLista(tLista *l, tAb *ab);
 
-void OrdenaLista(tLista *l);
-
 #endif
