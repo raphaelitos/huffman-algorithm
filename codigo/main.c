@@ -64,7 +64,7 @@ tAb* CriaArvoreHuf(tLista* nos){
     tAb *nova = JoinAb(a1, a2);
     InsereLista(nos, nova);
     
-    CriaArvoreHuf(nos);
+    return CriaArvoreHuf(nos);
 }
 
 int main(int argc, char *argv[]){
