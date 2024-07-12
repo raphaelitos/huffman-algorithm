@@ -38,16 +38,20 @@ void PrintVetInt(int *vet, int tam){
     printf("]");
 }
 
-void PreencheListaNos(int* vet, tLista* lista){
-    if(!vet || !lista) TratarStructNula("PreencheNos", "lista ou vet");
+tLista* CriaListaNos(int* vet){
+    if(!vet) TratarStructNula("PreencheNos", "vet");
 
+    tLista *lista = CriaLista();
     tAb *aux = NULL;
+    
     for(int i = 0; i < TAM_ASCII; i ++){
         if(vet[i]){
             aux = CriaAb((unsigned char)i, vet[i], NULL, NULL);
             InsereLista(lista, aux);
         }
     }
+
+    return lista;
 }
 
 tAb* CriaArvoreHuf(tLista* nos){
@@ -73,13 +77,18 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
     int* vet = IniciaVetAscII();
-    tLista *nos = CriaLista();
 
     char path[1000];
     sprintf(path, "%s/text.txt", argv[1]);
     
     ContaFreqCaracteres(vet, path);
-    PrintVetInt(vet, TAM_ASCII);
+
+    tLista *nos = CriaListaNos(vet);
+    tAb *arvHuf = CriaArvoreHuf(nos);
+    //PrintVetInt(vet, TAM_ASCII);
+
+    DesalocaaAb(arvHuf);
+    DesalocaLista(nos);
     
     free(vet);    
 }

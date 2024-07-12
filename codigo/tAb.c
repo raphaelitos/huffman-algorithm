@@ -24,8 +24,8 @@ tAb *CriaAb(unsigned char caractere, int frequencia, tAb *sae, tAb *sad){
 
 void DesalocaaAb(tAb *abb){
     if(!abb) return;
-    desalocaaAbb(abb->sae);
-    desalocaaAbb(abb->sad);
+    DesalocaaAb(abb->sae);
+    DesalocaaAb(abb->sad);
     free(abb);
 }
 

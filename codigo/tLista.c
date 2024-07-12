@@ -66,7 +66,31 @@ void InsereLista(tLista *l, tAb *ab){
     else{
         tCelula *aux = l->prim;
 
-        while(aux){
+        while(aux && (getFreqAb(nova->ab) > getFreqAb(aux->ab))){
+            aux = aux->prox;
+        }
+        if(aux){
+            nova->ant = aux->ant;
+            nova->prox = aux;
+            
+            if(aux->ant){
+                aux->ant->prox = nova;
+            }
+            else{//primeira posicao
+                l->prim = nova;
+            }
+            
+            aux->ant = nova;
+        }
+        else{//ultima posicao
+            nova->ant = l->ult;
+            l->ult->prox = nova;
+            l->ult = nova;
+        }
+
+        //outro jeito de fazer isso
+        /*
+         while(aux){
             if(getFreqAb(nova->ab) <= getFreqAb(aux->ab)){
                 
                 nova->ant = aux->ant;
@@ -89,30 +113,7 @@ void InsereLista(tLista *l, tAb *ab){
         nova->ant = l->ult;
         l->ult->prox = nova;
         l->ult = nova;
-        nova->prox = NULL;
-        //outro jeito de fazer isso
-        /*
-        while(aux && (getFreqAb(nova->ab) > getFreqAb(aux->ab))){
-            aux = aux->prox;
-        }
-        if(aux){
-            nova->ant = aux->ant;
-            nova->prox = aux;
-            
-            if(aux->ant){
-                aux->ant->prox = nova;
-            }
-            else{//primeira posicao
-                l->prim = nova;
-            }
-            
-            aux->ant = nova;
-        }
-        else{//ultima posicao
-            nova->ant = l->ult;
-            l->ult->prox = nova;
-            l->ult = nova;
-        }*/
+        nova->prox = NULL;*/
     }
     (l->tam)++;
 }
@@ -123,12 +124,14 @@ tAb* RetiraLista(tLista *l){
     tAb *aux = NULL;
 
     if(EstaVaziaLista(l)) return aux;
+    
     tCelula *pop = l->prim;
     aux = l->prim->ab;
     l->prim = l->prim->prox;
     if(l->prim){
         l->prim->ant = NULL;
     }
+    
     DesalocaCelula(pop);
     (l->tam)--;
     return aux;
