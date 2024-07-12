@@ -93,7 +93,7 @@ void InsereLista(tLista *l, tAb *ab){
 
     //outro jeito de fazer isso
     /*
-    while(aux && getFreqAb(nova->ab) > getFreqAb(aux->ab)){
+    while(aux && (getFreqAb(nova->ab) > getFreqAb(aux->ab))){
         aux = aux->prox;
     }
     if(aux){

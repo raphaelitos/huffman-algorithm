@@ -6,11 +6,11 @@
 struct ab{
     tAb *sad;
     tAb *sae;
-    char ch;
+    unsigned char ch;
     int freq;
 };
 
-tAb *criaAb(char caractere, int frequencia, tAb *sae, tAb *sad){
+tAb *CriaAb(unsigned char caractere, int frequencia, tAb *sae, tAb *sad){
     tAb *nova = (tAb*)calloc(1, sizeof(tAb));
     if(!nova)TratarFalhaAlocacao("arvore binaria");
     
@@ -22,11 +22,21 @@ tAb *criaAb(char caractere, int frequencia, tAb *sae, tAb *sad){
     return nova;
 }
 
-void desalocaaAb(tAb *abb){
+void DesalocaaAb(tAb *abb){
     if(!abb) return;
     desalocaaAbb(abb->sae);
     desalocaaAbb(abb->sad);
     free(abb);
+}
+
+tAb *JoinAb(tAb *a1, tAb*a2){
+    if(!a1 || !a2) TratarStructNula("join", "ab");
+
+    //como a lista estara ordenada, 
+    //essa criacao assume a1 < a2
+    tAb *nova = CriaAb('\0', (a1->freq + a2->freq), a1, a2);
+
+    return nova;
 }
 
 int getFreqAb(tAb *ab){
@@ -34,7 +44,7 @@ int getFreqAb(tAb *ab){
     return ab->freq; 
 }
 
-char getChAb(tAb *ab){
+unsigned char getChAb(tAb *ab){
     if(!ab)TratarStructNula("getCh", "ab");
     return ab->ch; 
 }

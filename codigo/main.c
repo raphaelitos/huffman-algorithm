@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "tLista.h"
+#include "utils.h"
 
 #define TAM_ASCII 128
 
@@ -15,8 +17,7 @@ void ContaFreqCaracteres(int *vet, char *path){
     if(!arq) exit(EXIT_FAILURE);
     
     int c = 0;
-    char ch = '\0';
-    
+
     while(1){
         c = fgetc(arq);
         if(c == EOF) break;
@@ -37,13 +38,26 @@ void PrintVetInt(int *vet, int tam){
     printf("]");
 }
 
+void PreencheListaNos(int* vet, tLista* lista){
+    if(!vet || !lista) TratarStructNula("PreencheNos", "lista ou vet");
+
+    tAb *aux = NULL;
+    for(int i = 0; i < TAM_ASCII; i ++){
+        if(vet[i]){
+            aux = CriaAb((unsigned char)i, vet[i], NULL, NULL);
+            InsereLista(lista, aux);
+        }
+    }
+}
+
 int main(int argc, char *argv[]){
     if(argc <= 1){
         printf("caminho para arquivos nao informado. Encerrando programa\n");
         exit(EXIT_FAILURE);
     }
     int* vet = IniciaVetAscII();
-    
+    tLista *nos = CriaLista();
+
     char path[1000];
     sprintf(path, "%s/text.txt", argv[1]);
     
