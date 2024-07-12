@@ -11,4 +11,8 @@ void DesalocaLista(tLista* l);
 
 void InsereLista(tLista *l, tAb *ab);
 
+tAb* RetiraLista(tLista *l);
+
+int getSizeLista(tLista *l);
+
 #endif

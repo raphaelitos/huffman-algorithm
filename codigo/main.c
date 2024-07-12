@@ -50,6 +50,23 @@ void PreencheListaNos(int* vet, tLista* lista){
     }
 }
 
+tAb* CriaArvoreHuf(tLista* nos){
+    if(!nos)TratarStructNula("CriaArvHuf", "lista");
+    
+    if(getSizeLista(nos) == 0) return NULL;
+
+    if(getSizeLista(nos) == 1){
+        return RetiraLista(nos);
+    }
+
+    tAb *a1 = RetiraLista(nos);
+    tAb *a2 = RetiraLista(nos);
+    tAb *nova = JoinAb(a1, a2);
+    InsereLista(nos, nova);
+    
+    CriaArvoreHuf(nos);
+}
+
 int main(int argc, char *argv[]){
     if(argc <= 1){
         printf("caminho para arquivos nao informado. Encerrando programa\n");
