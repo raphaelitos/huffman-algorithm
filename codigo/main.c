@@ -46,7 +46,7 @@ tLista* CriaListaNos(int* vet){
     
     for(int i = 0; i < TAM_ASCII; i ++){
         if(vet[i]){
-            aux = CriaAb((unsigned char)i, vet[i], NULL, NULL);
+            aux = CriaAb((unsigned char)i, (unsigned int)vet[i], NULL, NULL);
             InsereLista(lista, aux);
         }
     }
@@ -86,6 +86,8 @@ int main(int argc, char *argv[]){
     tLista *nos = CriaListaNos(vet);
     tAb *arvHuf = CriaArvoreHuf(nos);
     //PrintVetInt(vet, TAM_ASCII);
+
+    ImprimeArvore(arvHuf, -1);
 
     DesalocaaAb(arvHuf);
     DesalocaLista(nos);
