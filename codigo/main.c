@@ -73,9 +73,10 @@ tAb* CriaArvoreHuf(tLista* nos){
 
 int main(int argc, char *argv[]){
     if(argc <= 1){
-        printf("caminho para arquivos nao informado. Encerrando programa\n");
+        printf("Caminho para arquivos não informado. Encerrando programa.\n");
         exit(EXIT_FAILURE);
     }
+
     int* vet = IniciaVetAscII();
 
     char path[1000];
@@ -87,10 +88,38 @@ int main(int argc, char *argv[]){
     tAb *arvHuf = CriaArvoreHuf(nos);
     //PrintVetInt(vet, TAM_ASCII);
 
+    printf("imprimindo arvore original feita: \n");
     ImprimeArvore(arvHuf, -1);
+    printf("\n");
+
+    FILE *binFile = fopen("output.bin", "wb");
+    if (binFile == NULL) {
+        printf("Erro ao criar o arquivo binário.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    WriteBinAb(arvHuf, binFile);
+
+    fclose(binFile);
+
+    binFile = fopen("output.bin", "rb");
+    if (binFile == NULL) {
+        printf("Erro ao abrir o arquivo binário para leitura.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    tAb* arvLida = ReadBinAb(binFile);
+
+    printf("\nimprimindo arvore lida do arq bin: \n");
+    ImprimeArvore(arvLida, -1);
+    printf("\n");
+
+    fclose(binFile);
 
     DesalocaaAb(arvHuf);
+    DesalocaaAb(arvLida);
     DesalocaLista(nos);
-    
     free(vet);    
+
+    return 0;
 }
