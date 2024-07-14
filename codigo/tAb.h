@@ -40,4 +40,14 @@ unsigned char getChAb(tAb *ab);
 /// variavel do tipo tAb
 void ImprimeArvore(tAb *ab, int flag);
 
+/// @brief Escreve uma arvore binaria em um arquivo binario dado
+/// @param ab 
+/// @param arq 
+void WriteBinAb(tAb* ab, FILE* arq);
+
+/// @brief Le uma arvore binaria de um arquivo binario dado
+/// @param arq 
+/// @return Retorna uma arvore lida e alocada dinamicamente
+tAb* ReadBinAb(FILE* arq);
+
 #endif

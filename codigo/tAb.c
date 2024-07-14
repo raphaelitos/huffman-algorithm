@@ -25,6 +25,33 @@ static int maior(int a, int b){
     return (a > b) ? a : b;
 }
 
+static void WriteBinStructAb(tAb* ab, FILE* arq) {
+    if (!ab)TratarStructNula("WriteBinStructAb", "tAb");
+
+    fwrite(&ab->ch, sizeof(unsigned char), 1, arq);
+    fwrite(&ab->freq, sizeof(int), 1, arq);
+
+    if (ab->ch == '\0') {
+        WriteBinStructAb(ab->sae, arq);
+        WriteBinStructAb(ab->sad, arq);
+    }
+}
+
+static tAb* ReadBinStructAb(FILE* arq) {
+    unsigned char charAux;
+    fread(&charAux, sizeof(unsigned char), 1, arq);
+    int freqAux;
+    fread(&freqAux, sizeof(int), 1, arq);
+
+    tAb* ab = CriaAb(charAux, freqAux, NULL, NULL);
+
+    if (ab->ch == '\0') {
+        ab->sae = ReadBinStructAb(arq);
+        ab->sad = ReadBinStructAb(arq);
+    }
+
+    return ab;
+}
 
 tAb *CriaAb(unsigned char caractere, unsigned int frequencia, tAb *sae, tAb *sad){
     tAb *nova = (tAb*)calloc(1, sizeof(tAb));
@@ -75,4 +102,14 @@ void ImprimeArvore(tAb *ab, int flag){
     ImprimeArvore(ab->sad, 0);
     printf("%d\n", flag);
 
+}
+
+void WriteBinAb(tAb* ab, FILE* arq) {
+    if(!ab || !arq)TratarStructNula("WriteBinAb", "ab ou arq");
+    WriteBinStructAb(ab, arq);
+}
+
+tAb* ReadBinAb(FILE* arq) {
+    if(!arq)TratarStructNula("ReadBinAb", "arq");
+    return ReadBinStructAb(arq);
 }
