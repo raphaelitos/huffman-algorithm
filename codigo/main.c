@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tLista.h"
-#include "tPilhaDados.h"
+#include "tTrilha.h"
 #include "utils.h"
 
 #define TAM_ASCII 128
@@ -89,8 +89,8 @@ int main(int argc, char *argv[]){
     tAb *arvHuf = CriaArvoreHuf(nos);
     //PrintVetInt(vet, TAM_ASCII);
 
-    tPilhaDados* pilha = CriaPilhaDados();
-    tPilhaDados** table = calloc(127, sizeof(tPilhaDados*));
+    tTrilha* pilha = CriaTrilha();
+    tTrilha** table = calloc(127, sizeof(tTrilha*));
     CriaTabelaCodificacao(table, pilha, arvHuf);
     ImprimeTabela(table);
 

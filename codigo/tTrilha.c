@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "tPilhaDados.h"
+#include "tTrilha.h"
 #include "utils.h"
 
 typedef struct celDado tCelDado;
@@ -21,27 +21,27 @@ static void desalocaCelDado(tCelDado *c){
     free(c);
 }
 
-struct pilhaDados{
+struct Trilha{
     tCelDado *prim;
     tCelDado *ult;
     int tam;
 };
 
-static int EstaVaziaPilhaDados(tPilhaDados *p){
-    if(!p)TratarStructNula("estaVazia", "pilhaDados");
+static int EstaVaziaTrilha(tTrilha *p){
+    if(!p)TratarStructNula("estaVazia", "Trilha");
     return !(p->tam);
 }
 
-tPilhaDados *CriaPilhaDados(){
-    tPilhaDados *nova = (tPilhaDados*)calloc(1, sizeof(tPilhaDados));
-    if(!nova) TratarFalhaAlocacao("pilhaDados");
+tTrilha *CriaTrilha(){
+    tTrilha *nova = (tTrilha*)calloc(1, sizeof(tTrilha));
+    if(!nova) TratarFalhaAlocacao("Trilha");
 
     nova->prim = nova->ult = NULL;
     return nova;
 }
 
-void DesalocaPilhaDados(tPilhaDados *p){
-    if(!p) TratarStructNula("desaloca", "pilhaDados");
+void DesalocaTrilha(tTrilha *p){
+    if(!p) TratarStructNula("desaloca", "Trilha");
     tCelDado *pop = NULL, *aux = p->prim;
     while(aux){
         pop = aux;
@@ -51,23 +51,23 @@ void DesalocaPilhaDados(tPilhaDados *p){
     free(p);
 }
 
-tPilhaDados *ClonaPilhaDados(tPilhaDados *p){
-    if(!p)TratarStructNula("clona", "pilhaDados");
-    tPilhaDados *clone = CriaPilhaDados();
+tTrilha *ClonaTrilha(tTrilha *p){
+    if(!p)TratarStructNula("clona", "Trilha");
+    tTrilha *clone = CriaTrilha();
     
     for(tCelDado *c = p->prim; c != NULL; c = c->prox){
-        InserePilhaDados(clone, c->info);
+        InsereTrilha(clone, c->info);
     }
     
     return clone;
 }
 
-void InserePilhaDados(tPilhaDados *p, int bit){
-    if(!p) TratarStructNula("insere", "pilhaDados");
+void InsereTrilha(tTrilha *p, int bit){
+    if(!p) TratarStructNula("insere", "Trilha");
 
     tCelDado *nova = criaCelDado(bit);
 
-    if(EstaVaziaPilhaDados(p)){
+    if(EstaVaziaTrilha(p)){
         p->prim = p->ult = nova;
     }
     else{
@@ -77,9 +77,9 @@ void InserePilhaDados(tPilhaDados *p, int bit){
     (p->tam)++;
 }
 
-char RetiraPilhaDados(tPilhaDados *p){
-    if(!p) TratarStructNula("retira", "pilhaDados");
-    if(EstaVaziaPilhaDados(p)){
+char RetiraTrilha(tTrilha *p){
+    if(!p) TratarStructNula("retira", "Trilha");
+    if(EstaVaziaTrilha(p)){
         return '\0';
     }
     tCelDado *pop = p->prim;
@@ -89,29 +89,29 @@ char RetiraPilhaDados(tPilhaDados *p){
     desalocaCelDado(pop);
 }
 
-int getSizePilhaDados(tPilhaDados *p){
-    if(!p) TratarStructNula("getSize", "pilhaDados");
+int getSizeTrilha(tTrilha *p){
+    if(!p) TratarStructNula("getSize", "Trilha");
     return p->tam;
 }
 
-void CriaTabelaCodificacao(tPilhaDados** table, tPilhaDados* pilha, tAb* ab) {
+void CriaTabelaCodificacao(tTrilha** table, tTrilha* pilha, tAb* ab) {
     if(!ab)TratarStructNula("CriaTabelaCodificacao", "ab");
 
     int index = (int) getChAb(ab);
     if(ehFolha(ab)) {
-        table[index] = ClonaPilhaDados(pilha);
+        table[index] = ClonaTrilha(pilha);
 
     } else {
-        InserePilhaDados(pilha, 0);
+        InsereTrilha(pilha, 0);
         CriaTabelaCodificacao(table, pilha, GetSae(ab));
-        InserePilhaDados(pilha, 1);
+        InsereTrilha(pilha, 1);
         CriaTabelaCodificacao(table, pilha, GetSad(ab));
     }
 
-    RetiraPilhaDados(pilha);
+    RetiraTrilha(pilha);
 }
 
-static void ImprimePilha(tPilhaDados* pilha) {
+static void ImprimePilha(tTrilha* pilha) {
     tCelDado* atual = pilha->prim;
     while (atual) {
         printf("%d", atual->info);
@@ -119,7 +119,7 @@ static void ImprimePilha(tPilhaDados* pilha) {
     }
 }
 
-void ImprimeTabela(tPilhaDados** table) {
+void ImprimeTabela(tTrilha** table) {
     for (int i = 0; i < 127; i++) {
         if (table[i] != NULL) {
             printf("Tabela[%c]: ", (char)i);
