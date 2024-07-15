@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tLista.h"
+#include "tPilhaDados.h"
 #include "utils.h"
 
 #define TAM_ASCII 128
@@ -80,13 +81,18 @@ int main(int argc, char *argv[]){
     int* vet = IniciaVetAscII();
 
     char path[1000];
-    sprintf(path, "%s/text.txt", argv[1]);
+    sprintf(path, "%s/text2.txt", argv[1]);
     
     ContaFreqCaracteres(vet, path);
 
     tLista *nos = CriaListaNos(vet);
     tAb *arvHuf = CriaArvoreHuf(nos);
     //PrintVetInt(vet, TAM_ASCII);
+
+    tPilhaDados* pilha = CriaPilhaDados();
+    tPilhaDados** table = calloc(127, sizeof(tPilhaDados*));
+    CriaTabelaCodificacao(table, pilha, arvHuf);
+    ImprimeTabela(table);
 
     printf("imprimindo arvore original feita: \n");
     ImprimeArvore(arvHuf, -1);

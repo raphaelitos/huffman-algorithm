@@ -1,8 +1,9 @@
 #ifndef _TLISTADADOS_H_
 #define _TLISTADADOS_H_
 
-typedef struct pilhaDados tPilhaDados;
+#include "tAb.h"
 
+typedef struct pilhaDados tPilhaDados;
 
 tPilhaDados *CriaPilhaDados();
 
@@ -12,8 +13,12 @@ tPilhaDados *ClonaPilhaDados(tPilhaDados *p);
 
 void InserePilhaDados(tPilhaDados *p, char c);
 
-char *RetiraPilhaDados(tPilhaDados *p);
+char RetiraPilhaDados(tPilhaDados *p);
 
 int getSizePilhaDados(tPilhaDados *p);
+
+void CriaTabelaCodificacao(tPilhaDados** table, tPilhaDados* pilha, tAb* ab);
+
+void ImprimeTabela(tPilhaDados** table);
 
 #endif

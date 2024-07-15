@@ -3,10 +3,12 @@
 #include "tPilhaDados.h"
 #include "utils.h"
 
-typedef struct celDado{
+typedef struct celDado tCelDado;
+
+struct celDado{
     char info;
     tCelDado *prox;
-}tCelDado;
+};
 
 static tCelDado *criaCelDado(char info){
     tCelDado *nova = (tCelDado*)calloc(1, sizeof(tCelDado));
@@ -90,4 +92,39 @@ char RetiraPilhaDados(tPilhaDados *p){
 int getSizePilhaDados(tPilhaDados *p){
     if(!p) TratarStructNula("getSize", "pilhaDados");
     return p->tam;
+}
+
+void CriaTabelaCodificacao(tPilhaDados** table, tPilhaDados* pilha, tAb* ab) {
+    if(!ab)TratarStructNula("CriaTabelaCodificacao", "ab");
+
+    int index = (int) getChAb(ab);
+    if(ehFolha(ab)) {
+        table[index] = ClonaPilhaDados(pilha);
+
+    } else {
+        InserePilhaDados(pilha, '0');
+        CriaTabelaCodificacao(table, pilha, GetSae(ab));
+        InserePilhaDados(pilha, '1');
+        CriaTabelaCodificacao(table, pilha, GetSad(ab));
+    }
+
+    RetiraPilhaDados(pilha);
+}
+
+static void ImprimePilha(tPilhaDados* pilha) {
+    tCelDado* atual = pilha->prim;
+    while (atual) {
+        printf("%c", atual->info);
+        atual = atual->prox;
+    }
+}
+
+void ImprimeTabela(tPilhaDados** table) {
+    for (int i = 0; i < 127; i++) {
+        if (table[i] != NULL) {
+            printf("Tabela[%c]: ", (char)i);
+            ImprimePilha(table[i]);
+            printf("\n");
+        }
+    }
 }

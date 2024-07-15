@@ -3,6 +3,11 @@
 
 typedef struct ab tAb;
 
+/// @brief Verifica se uma arvore é folha
+/// @param a 
+/// @return Retorna 1 para folha e 0 para o contrário
+int ehFolha(tAb *a);
+
 /// @brief Cria dinamicamente uma 
 /// estrutuara tAb
 /// @param caractere o caracctere do no 
@@ -49,5 +54,15 @@ void WriteBinAb(tAb* ab, FILE* arq);
 /// @param arq 
 /// @return Retorna uma arvore lida e alocada dinamicamente
 tAb* ReadBinAb(FILE* arq);
+
+/// @brief  Obtem o ponteiro para a subarvore da esquerda de uma arvore valida
+/// @param ab 
+/// @return Subarvore da esquerda
+tAb* GetSae(tAb* ab);
+
+/// @brief Obtem o ponteiro para a subarvore da direita de uma arvore valida
+/// @param ab 
+/// @return Subarvore da direita
+tAb* GetSad(tAb* ab);
 
 #endif

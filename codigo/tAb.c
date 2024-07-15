@@ -14,12 +14,6 @@ struct ab{
     unsigned int freq;
 };
 
-static int ehFolha(tAb *a){
-    if(a){
-        return(a->sad == NULL && a->sae == NULL);
-    }
-    return 0;
-}
 
 static int maior(int a, int b){
     return (a > b) ? a : b;
@@ -51,6 +45,13 @@ static tAb* ReadBinStructAb(FILE* arq) {
     }
 
     return ab;
+}
+
+int ehFolha(tAb *a){
+    if(a){
+        return(a->sad == NULL && a->sae == NULL);
+    }
+    return 0;
 }
 
 tAb *CriaAb(unsigned char caractere, unsigned int frequencia, tAb *sae, tAb *sad){
@@ -112,4 +113,12 @@ void WriteBinAb(tAb* ab, FILE* arq) {
 tAb* ReadBinAb(FILE* arq) {
     if(!arq)TratarStructNula("ReadBinAb", "arq");
     return ReadBinStructAb(arq);
+}
+
+tAb* GetSae(tAb* ab) {
+    return ab->sae;
+}
+
+tAb* GetSad(tAb* ab) {
+    return ab->sad;
 }
