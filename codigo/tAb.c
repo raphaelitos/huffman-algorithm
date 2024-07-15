@@ -29,7 +29,7 @@ static void WriteBinStructAb(tAb* ab, FILE* arq) {
     if (!ab)TratarStructNula("WriteBinStructAb", "tAb");
 
     fwrite(&ab->ch, sizeof(unsigned char), 1, arq);
-    fwrite(&ab->freq, sizeof(int), 1, arq);
+    fwrite(&ab->freq, sizeof(unsigned int), 1, arq);
 
     if (ab->ch == '\0') {
         WriteBinStructAb(ab->sae, arq);
@@ -41,7 +41,7 @@ static tAb* ReadBinStructAb(FILE* arq) {
     unsigned char charAux;
     fread(&charAux, sizeof(unsigned char), 1, arq);
     int freqAux;
-    fread(&freqAux, sizeof(int), 1, arq);
+    fread(&freqAux, sizeof(unsigned int), 1, arq);
 
     tAb* ab = CriaAb(charAux, freqAux, NULL, NULL);
 
