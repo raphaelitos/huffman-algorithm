@@ -6,11 +6,11 @@
 typedef struct celDado tCelDado;
 
 struct celDado{
-    char info;
+    int info;
     tCelDado *prox;
 };
 
-static tCelDado *criaCelDado(char info){
+static tCelDado *criaCelDado(int info){
     tCelDado *nova = (tCelDado*)calloc(1, sizeof(tCelDado));
     if(!nova)TratarFalhaAlocacao("celDado");
     nova->info = info;
@@ -62,10 +62,10 @@ tPilhaDados *ClonaPilhaDados(tPilhaDados *p){
     return clone;
 }
 
-void InserePilhaDados(tPilhaDados *p, char c){
+void InserePilhaDados(tPilhaDados *p, int bit){
     if(!p) TratarStructNula("insere", "pilhaDados");
 
-    tCelDado *nova = criaCelDado(c);
+    tCelDado *nova = criaCelDado(bit);
 
     if(EstaVaziaPilhaDados(p)){
         p->prim = p->ult = nova;
@@ -83,7 +83,7 @@ char RetiraPilhaDados(tPilhaDados *p){
         return '\0';
     }
     tCelDado *pop = p->prim;
-    char info = p->prim->info;
+    int info = p->prim->info;
     p->prim = p->prim->prox;
     (p->tam)--;
     desalocaCelDado(pop);
@@ -102,9 +102,9 @@ void CriaTabelaCodificacao(tPilhaDados** table, tPilhaDados* pilha, tAb* ab) {
         table[index] = ClonaPilhaDados(pilha);
 
     } else {
-        InserePilhaDados(pilha, '0');
+        InserePilhaDados(pilha, 0);
         CriaTabelaCodificacao(table, pilha, GetSae(ab));
-        InserePilhaDados(pilha, '1');
+        InserePilhaDados(pilha, 1);
         CriaTabelaCodificacao(table, pilha, GetSad(ab));
     }
 
@@ -114,7 +114,7 @@ void CriaTabelaCodificacao(tPilhaDados** table, tPilhaDados* pilha, tAb* ab) {
 static void ImprimePilha(tPilhaDados* pilha) {
     tCelDado* atual = pilha->prim;
     while (atual) {
-        printf("%c", atual->info);
+        printf("%d", atual->info);
         atual = atual->prox;
     }
 }

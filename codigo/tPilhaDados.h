@@ -11,7 +11,7 @@ void DesalocaPilhaDados(tPilhaDados *p);
 
 tPilhaDados *ClonaPilhaDados(tPilhaDados *p);
 
-void InserePilhaDados(tPilhaDados *p, char c);
+void InserePilhaDados(tPilhaDados *p, int c);
 
 char RetiraPilhaDados(tPilhaDados *p);
 
