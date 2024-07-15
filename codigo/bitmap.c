@@ -27,7 +27,6 @@ void assert(int testresult, char* message) {
 	}
 }
 
-
 /**
  * Retorna o conteudo do mapa de bits.
  * @param bm O mapa de bits.
@@ -106,7 +105,6 @@ static void bitmapSetBit(bitmap* bm, unsigned int index, unsigned char bit) {
     bit=bit<<(7-(index%8));
     bm->contents[index/8]= bm->contents[index/8] | bit;
 }
-
 
 /**
  * Adiciona um bit no final do mapa de bits.

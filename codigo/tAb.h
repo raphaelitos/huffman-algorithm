@@ -1,6 +1,8 @@
 #ifndef _tAb_H_
 #define _tAb_H_
 
+#include "bitmap.h"
+
 typedef struct ab tAb;
 
 /// @brief Verifica se uma arvore é folha
