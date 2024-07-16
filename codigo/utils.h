@@ -1,6 +1,8 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
+#define TAM_ASCII 256
+
 /**
  * Encerra o programa apos avisar a funcao onde isso
  * ocorreu e de qual estrutura se trata

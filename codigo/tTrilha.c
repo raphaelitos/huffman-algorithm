@@ -97,7 +97,7 @@ int getSizeTrilha(tTrilha *p){
 void CriaTabelaCodificacao(tTrilha** table, tTrilha* pilha, tAb* ab) {
     if(!ab)TratarStructNula("CriaTabelaCodificacao", "ab");
 
-    int index = (int) getChAb(ab);
+    unsigned char index = getChAb(ab);
     if(ehFolha(ab)) {
         table[index] = ClonaTrilha(pilha);
 

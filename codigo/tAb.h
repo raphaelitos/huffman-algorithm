@@ -1,9 +1,10 @@
 #ifndef _tAb_H_
 #define _tAb_H_
 
-#include "bitmap.h"
-
 typedef struct ab tAb;
+
+#include "bitmap.h"
+#include "tLista.h"
 
 /// @brief Verifica se uma arvore é folha
 /// @param a 
@@ -66,5 +67,10 @@ tAb* GetSae(tAb* ab);
 /// @param ab 
 /// @return Subarvore da direita
 tAb* GetSad(tAb* ab);
+
+/// @brief Cria a arvore de codificacao de huffman
+/// @param nos 
+/// @return Retorna a arvore criada
+tAb* CriaArvoreHuf(tLista* nos);
 
 #endif

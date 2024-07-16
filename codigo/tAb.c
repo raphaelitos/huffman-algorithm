@@ -3,17 +3,12 @@
 #include "tAb.h"
 #include "utils.h"
 
-tAb* aumentaarv(tAb*a){
-    if(a)printf("eitapreula");
-}
-
 struct ab{
     tAb *sad;
     tAb *sae;
     unsigned char ch;
     unsigned int freq;
 };
-
 
 static int maior(int a, int b){
     return (a > b) ? a : b;
@@ -71,7 +66,7 @@ void ImprimeArvore(tAb *ab, int flag){
         printf("%c\n", ab->ch);
         return;
     }
-    ImprimeAvore(ab->sae, 1);
+    ImprimeArvore(ab->sae, 1);
     ImprimeArvore(ab->sad, 0);
     printf("%d\n", flag);
 
@@ -111,4 +106,21 @@ tAb* GetSae(tAb* ab) {
 
 tAb* GetSad(tAb* ab) {
     return ab->sad;
+}
+
+tAb* CriaArvoreHuf(tLista* nos){
+    if(!nos)TratarStructNula("CriaArvHuf", "lista");
+    
+    if(getSizeLista(nos) == 0) return NULL;
+
+    if(getSizeLista(nos) == 1){
+        return RetiraLista(nos);
+    }
+
+    tAb *a1 = RetiraLista(nos);
+    tAb *a2 = RetiraLista(nos);
+    tAb *nova = JoinAb(a1, a2);
+    InsereLista(nos, nova);
+    
+    return CriaArvoreHuf(nos);
 }

@@ -15,4 +15,6 @@ tAb* RetiraLista(tLista *l);
 
 int getSizeLista(tLista *l);
 
+tLista* CriaListaNos(int* vet);
+
 #endif

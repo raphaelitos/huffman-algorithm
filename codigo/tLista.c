@@ -141,3 +141,19 @@ int getSizeLista(tLista *l){
     if(!l)TratarStructNula("getSize", "lista");
     return l->tam;
 }
+
+tLista* CriaListaNos(int* vet){
+    if(!vet) TratarStructNula("PreencheNos", "vet");
+
+    tLista *lista = CriaLista();
+    tAb *aux = NULL;
+    
+    for(int i = 0; i < TAM_ASCII; i ++){
+        if(vet[i]){
+            aux = CriaAb((unsigned char)i, (unsigned int)vet[i], NULL, NULL);
+            InsereLista(lista, aux);
+        }
+    }
+
+    return lista;
+}
