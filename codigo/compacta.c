@@ -51,8 +51,8 @@ int main(int argc, char *argv[]){
     tAb *arvHuf = CriaArvoreHuf(nos);
 
     tTrilha* pilha = CriaTrilha();
-    tTrilha** table = calloc(127, sizeof(tTrilha*));
-    CriaTabelaCodificacao(table, pilha, arvHuf);
+    char** table = CriaTabelaCodificacao();
+    PreencheTabelaCodificacao(table, pilha, arvHuf);
     DesalocaTrilha(pilha);
     ImprimeTabela(table);
 

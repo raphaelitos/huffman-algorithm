@@ -5,20 +5,27 @@
 
 typedef struct Trilha tTrilha;
 
+#define ESQUERDA '0'
+#define DIREITA '1'
+
 tTrilha *CriaTrilha();
 
 void DesalocaTrilha(tTrilha *p);
 
 tTrilha *ClonaTrilha(tTrilha *p);
 
-void InsereTrilha(tTrilha *p, int c);
+void PushTrilha(tTrilha *p, int c);
 
-char RetiraTrilha(tTrilha *p);
+char PopTrilha(tTrilha *p);
 
 int getSizeTrilha(tTrilha *p);
 
-void CriaTabelaCodificacao(tTrilha** table, tTrilha* pilha, tAb* ab);
+void PreencheTabelaCodificacao(char** table, tTrilha* t, tAb* ab);
 
-void ImprimeTabela(tTrilha** table);
+char **CriaTabelaCodificacao();
+
+void ImprimeTabela(char** table);
+
+unsigned char* getInfoTrilha(tTrilha *t);
 
 #endif

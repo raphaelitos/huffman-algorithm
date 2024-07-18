@@ -6,15 +6,16 @@
 typedef struct celDado tCelDado;
 
 struct celDado{
-    int info;
+    unsigned char info;
     tCelDado *prox;
+    tCelDado *ant;
 };
 
-static tCelDado *criaCelDado(int info){
+static tCelDado *criaCelDado(unsigned char info){
     tCelDado *nova = (tCelDado*)calloc(1, sizeof(tCelDado));
     if(!nova)TratarFalhaAlocacao("celDado");
     nova->info = info;
-    nova->prox = NULL;
+    nova->prox = nova->ant = NULL;
 }
 
 static void desalocaCelDado(tCelDado *c){
@@ -36,7 +37,7 @@ tTrilha *CriaTrilha(){
     tTrilha *nova = (tTrilha*)calloc(1, sizeof(tTrilha));
     if(!nova) TratarFalhaAlocacao("Trilha");
 
-    nova->prim = nova->ult = NULL;
+    nova->prim = NULL;
     return nova;
 }
 
@@ -56,37 +57,42 @@ tTrilha *ClonaTrilha(tTrilha *p){
     tTrilha *clone = CriaTrilha();
     
     for(tCelDado *c = p->prim; c != NULL; c = c->prox){
-        InsereTrilha(clone, c->info);
+        pushTrilha(clone, c->info);
     }
     
     return clone;
 }
 
-void InsereTrilha(tTrilha *p, int bit){
+void pushTrilha(tTrilha *p, unsigned char bit){
     if(!p) TratarStructNula("insere", "Trilha");
 
     tCelDado *nova = criaCelDado(bit);
 
     if(EstaVaziaTrilha(p)){
-        p->prim = p->ult = nova;
+        p->prim = p->ult =nova;
     }
     else{
-        nova->prox = p->prim;
-        p->prim = nova;
+        p->ult->prox = nova;
+        nova->ant = p->ult;
+        p->ult = nova;
     }
     (p->tam)++;
 }
 
-char RetiraTrilha(tTrilha *p){
+char PopTrilha(tTrilha *p){
     if(!p) TratarStructNula("retira", "Trilha");
     if(EstaVaziaTrilha(p)){
         return '\0';
     }
-    tCelDado *pop = p->prim;
-    int info = p->prim->info;
-    p->prim = p->prim->prox;
+    tCelDado *pop = p->ult;
+    char c = pop->info;
+    p->ult = p->ult->ant;
+    if(p->ult){
+        p->ult->prox = NULL;
+    }
     (p->tam)--;
     desalocaCelDado(pop);
+    return c;
 }
 
 int getSizeTrilha(tTrilha *p){
@@ -94,37 +100,56 @@ int getSizeTrilha(tTrilha *p){
     return p->tam;
 }
 
-void CriaTabelaCodificacao(tTrilha** table, tTrilha* pilha, tAb* ab) {
+unsigned char* getInfoTrilha(tTrilha *t){
+    if(!t) TratarStructNula("getInfo", "trilha");
+    if(EstaVaziaTrilha(t)) return NULL;
+
+    unsigned char *path = (unsigned char*)calloc((getSizeTrilha(t) + 1), sizeof(unsigned char));
+    tCelDado *c;
+    int i = 0;
+    for(c = t->prim; c != NULL; c = c->prox){
+        path[i] = c->info;
+        i++;
+    }
+    path[getSizeTrilha(t) + 1] = '\0';
+    return path;
+}
+
+void PreencheTabelaCodificacao(char** table, tTrilha* t, tAb* ab) {
     if(!ab)TratarStructNula("CriaTabelaCodificacao", "ab");
 
-    unsigned char index = getChAb(ab);
+    int index = (int)getChAb(ab);
     if(ehFolha(ab)) {
-        table[index] = ClonaTrilha(pilha);
+        table[index] = getInfoTrilha(t);
 
     } else {
-        InsereTrilha(pilha, 0);
-        CriaTabelaCodificacao(table, pilha, GetSae(ab));
-        InsereTrilha(pilha, 1);
-        CriaTabelaCodificacao(table, pilha, GetSad(ab));
+        pushTrilha(t, 0);
+        CriaTabelaCodificacao(table, t, GetSae(ab));
+        pushTrilha(t, 1);
+        CriaTabelaCodificacao(table, t, GetSad(ab));
     }
 
-    RetiraTrilha(pilha);
+    popTrilha(t);
+}
+
+char **CriaTabelaCodificacao(){
+    char **nova = (char**)calloc(256, sizeof(unsigned char));
 }
 
 static void ImprimePilha(tTrilha* pilha) {
     tCelDado* atual = pilha->prim;
     while (atual) {
-        printf("%d", atual->info);
+        printf("%c", atual->info);
         atual = atual->prox;
     }
 }
 
-void ImprimeTabela(tTrilha** table) {
+void ImprimeTabela(char** table) {
     for (int i = 0; i < 127; i++) {
         if (table[i] != NULL) {
             printf("Tabela[%c]: ", (char)i);
-            ImprimePilha(table[i]);
-            printf("\n");
+            //ImprimePilha(table[i]);
+            printf("%s\n", table[i]);
         }
     }
 }
