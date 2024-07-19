@@ -51,9 +51,8 @@ int main(int argc, char *argv[]){
     tAb *arvHuf = CriaArvoreHuf(nos);
 
     tTrilha* pilha = CriaTrilha();
-    char** table = CriaTabelaCodificacao();
+    unsigned char** table = CriaTabelaCodificacao();
     PreencheTabelaCodificacao(table, pilha, arvHuf);
-    DesalocaTrilha(pilha);
     ImprimeTabela(table);
 
     /*
@@ -87,12 +86,16 @@ int main(int argc, char *argv[]){
     */
 
     // Desalocação e limpeza
-    for (int i = 0; i < TAM_ASCII; i++) {
+    /*for (int i = 0; i < TAM_ASCII; i++) {
         if (table[i]) {
             DesalocaTrilha(table[i]);
         }
     }
     free(table);
+    */
+
+    DesalocaTrilha(pilha);
+    DesalocaTabelaCodificacao(table);
     DesalocaaAb(arvHuf);
     //DesalocaaAb(arvLida);
     DesalocaLista(nos);

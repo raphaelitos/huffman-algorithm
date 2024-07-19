@@ -57,13 +57,13 @@ tTrilha *ClonaTrilha(tTrilha *p){
     tTrilha *clone = CriaTrilha();
     
     for(tCelDado *c = p->prim; c != NULL; c = c->prox){
-        pushTrilha(clone, c->info);
+        PushTrilha(clone, c->info);
     }
     
     return clone;
 }
 
-void pushTrilha(tTrilha *p, unsigned char bit){
+void PushTrilha(tTrilha *p, unsigned char bit){
     if(!p) TratarStructNula("insere", "Trilha");
 
     tCelDado *nova = criaCelDado(bit);
@@ -100,40 +100,60 @@ int getSizeTrilha(tTrilha *p){
     return p->tam;
 }
 
+unsigned char **CriaTabelaCodificacao(){
+    unsigned char **nova = (unsigned char**)calloc(TAM_ASCII, sizeof(unsigned char*));
+    if(!nova)TratarFalhaAlocacao("TabelaCod");
+
+    for(int i = 0; i < TAM_ASCII; i++){
+        nova[i] = NULL;
+    }
+
+    return nova;
+}
+
+void DesalocaTabelaCodificacao(unsigned char **table){
+    if(!table) return;
+
+    for(int i = 0; i < TAM_ASCII; i++){
+        free(table[i]);
+    }
+    free(table);
+}
+
 unsigned char* getInfoTrilha(tTrilha *t){
     if(!t) TratarStructNula("getInfo", "trilha");
     if(EstaVaziaTrilha(t)) return NULL;
 
     unsigned char *path = (unsigned char*)calloc((getSizeTrilha(t) + 1), sizeof(unsigned char));
     tCelDado *c;
+    path[getSizeTrilha(t)] = '\0';
     int i = 0;
     for(c = t->prim; c != NULL; c = c->prox){
         path[i] = c->info;
         i++;
+        if(i > getSizeTrilha(t)){
+            printf("Algo deu errado com o tamanho da pilha");
+            exit(EXIT_FAILURE);
+        }
     }
-    path[getSizeTrilha(t) + 1] = '\0';
     return path;
 }
 
-void PreencheTabelaCodificacao(char** table, tTrilha* t, tAb* ab) {
+void PreencheTabelaCodificacao(unsigned char** table, tTrilha* t, tAb* ab) {
     if(!ab)TratarStructNula("CriaTabelaCodificacao", "ab");
 
     int index = (int)getChAb(ab);
     if(ehFolha(ab)) {
         table[index] = getInfoTrilha(t);
-
-    } else {
-        pushTrilha(t, 0);
-        CriaTabelaCodificacao(table, t, GetSae(ab));
-        pushTrilha(t, 1);
-        CriaTabelaCodificacao(table, t, GetSad(ab));
+        PopTrilha(t);
+    } 
+    else {
+        PushTrilha(t, ESQUERDA);
+        PreencheTabelaCodificacao(table, t, GetSae(ab));
+        PushTrilha(t, DIREITA);
+        PreencheTabelaCodificacao(table, t, GetSad(ab));
     }
 
-    popTrilha(t);
-}
-
-char **CriaTabelaCodificacao(){
-    char **nova = (char**)calloc(256, sizeof(unsigned char));
 }
 
 static void ImprimePilha(tTrilha* pilha) {
@@ -144,7 +164,7 @@ static void ImprimePilha(tTrilha* pilha) {
     }
 }
 
-void ImprimeTabela(char** table) {
+void ImprimeTabela(unsigned char** table) {
     for (int i = 0; i < 127; i++) {
         if (table[i] != NULL) {
             printf("Tabela[%c]: ", (char)i);
