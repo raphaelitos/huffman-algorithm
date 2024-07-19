@@ -132,4 +132,20 @@ void bitmapLibera (bitmap* bm){
     free (bm);
 }
 
+/**
+ * Adiciona um byte no final do mapa de bits.
+ * @param bm O mapa de bits.
+ * @param byte O novo valor do byte.
+ * @pre bitmapGetLength(bm) + 8 <= bitmapGetMaxSize(bm)
+ * @post Os bits do byte são adicionados ao final do mapa de bits
+ */
+void bitmapAppendByte(bitmap* bm, unsigned char byte) {
+    // Verificar se há espaço suficiente para adicionar um byte (8 bits)
+    assert(bm->length + 8 <= bm->max_size, "Tamanho máximo excedido no mapa de bits.");
 
+    // Adicionar cada bit do byte ao final do mapa de bits
+    for (int i = 7; i >= 0; i--) {
+        unsigned char bit = (byte >> i) & 0x01;
+        bitmapAppendLeastSignificantBit(bm, bit);
+    }
+}
