@@ -142,8 +142,8 @@ unsigned char* getInfoTrilha(tTrilha *t){
 void PreencheTabelaCodificacao(unsigned char** table, tTrilha* t, tAb* ab) {
     if(!ab)TratarStructNula("CriaTabelaCodificacao", "ab");
 
-    int index = (int)getChAb(ab);
     if(ehFolha(ab)) {
+        int index = (int)getChAb(ab);
         table[index] = getInfoTrilha(t);
         PopTrilha(t);
     } 
