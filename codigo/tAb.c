@@ -129,7 +129,7 @@ void DumpArvoreBitmap(tAb *ab, bitmap *bm){
     if(!ab || !bm) TratarStructNula("dumpArvBitmap", "ab ou bitmap");
     if(ehFolha(ab)){
         bitmapAppendLeastSignificantBit(bm, 1);
-        /*appendbyte*/
+        bitmapAppendByte(bm, ab->ch);
     }
     else{
         bitmapAppendLeastSignificantBit(bm, 0);
