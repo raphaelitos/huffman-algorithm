@@ -145,7 +145,6 @@ void PreencheTabelaCodificacao(unsigned char** table, tTrilha* t, tAb* ab) {
     if(ehFolha(ab)) {
         int index = (int)getChAb(ab);
         table[index] = getInfoTrilha(t);
-        PopTrilha(t);
     } 
     else {
         PushTrilha(t, ESQUERDA);
@@ -153,7 +152,7 @@ void PreencheTabelaCodificacao(unsigned char** table, tTrilha* t, tAb* ab) {
         PushTrilha(t, DIREITA);
         PreencheTabelaCodificacao(table, t, GetSad(ab));
     }
-
+    PopTrilha(t);
 }
 
 static void ImprimePilha(tTrilha* pilha) {

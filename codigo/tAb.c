@@ -124,3 +124,16 @@ tAb* CriaArvoreHuf(tLista* nos){
     
     return CriaArvoreHuf(nos);
 }
+
+void DumpArvoreBitmap(tAb *ab, bitmap *bm){
+    if(!ab || !bm) TratarStructNula("dumpArvBitmap", "ab ou bitmap");
+    if(ehFolha(ab)){
+        bitmapAppendLeastSignificantBit(bm, 1);
+        /*appendbyte*/
+    }
+    else{
+        bitmapAppendLeastSignificantBit(bm, 0);
+    }
+    DumpArvoreBitmap(ab->sae, bm);
+    DumpArvoreBitmap(ab->sad, bm);
+}

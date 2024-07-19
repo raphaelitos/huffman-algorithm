@@ -73,4 +73,6 @@ tAb* GetSad(tAb* ab);
 /// @return Retorna a arvore criada
 tAb* CriaArvoreHuf(tLista* nos);
 
+void DumpArvoreBitmap(tAb *ab, bitmap *bm);
+
 #endif
