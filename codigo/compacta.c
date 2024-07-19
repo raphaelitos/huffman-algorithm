@@ -86,13 +86,6 @@ int main(int argc, char *argv[]){
     */
 
     // Desalocação e limpeza
-    /*for (int i = 0; i < TAM_ASCII; i++) {
-        if (table[i]) {
-            DesalocaTrilha(table[i]);
-        }
-    }
-    free(table);
-    */
 
     DesalocaTrilha(pilha);
     DesalocaTabelaCodificacao(table);
