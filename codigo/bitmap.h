@@ -29,4 +29,6 @@ void bitmapLibera (bitmap* bm);
 
 void bitmapAppendByte(bitmap* bm, unsigned char byte);
 
+unsigned char* bitmapGetByte(bitmap* bm, unsigned int index);
+
 #endif /*BITMAP_H_*/

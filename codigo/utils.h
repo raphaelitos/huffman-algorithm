@@ -1,9 +1,12 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
+#include "bitmap.h"
+
 #define TAM_ASCII 256
 #define ESQUERDA '0'
 #define DIREITA '1'
+
 
 /**
  * Encerra o programa apos avisar a funcao onde isso
@@ -21,5 +24,7 @@ void TratarFalhaAlocacao(const char *nomeStruct);
  * Compara dois termos validos e diz se sao iguais.
 */
 int EhMesmoTermo(char *str1, char*str2);
+
+void BinDumpBitmap(bitmap *bm, char* path, char *nomeArquivo);
 
 #endif
