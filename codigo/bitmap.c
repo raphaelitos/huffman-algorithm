@@ -148,4 +148,5 @@ void bitmapAppendByte(bitmap* bm, unsigned char byte) {
         unsigned char bit = (byte >> i) & 0x01;
         bitmapAppendLeastSignificantBit(bm, bit);
     }
+	(bm->length) += 8;
 }
