@@ -137,3 +137,5 @@ void DumpArvoreBitmap(tAb *ab, bitmap *bm){
     DumpArvoreBitmap(ab->sae, bm);
     DumpArvoreBitmap(ab->sad, bm);
 }
+
+tAb *ReadArvoreBitmap(bitmap *bm);

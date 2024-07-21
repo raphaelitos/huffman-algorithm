@@ -25,8 +25,22 @@ void TratarFalhaAlocacao(const char *nomeStruct);
 */
 int EhMesmoTermo(char *str1, char*str2);
 
+/// @brief salva bm num arquivo binario  
+/// @param bm um bitmap valido
+/// @param path o caminho para o diretorio de bm
+/// @param nomeArquivo o nome do arquivo onde bm 
+/// sera salvo
+/// @pre o caminho ser valido e o bitmap estar
+/// devidamente alocado na memoria
+/// @post um arquivo .bin nomeado por nomeArquivo
+/// no diretorio path
 void BinDumpBitmap(bitmap *bm, char* path, char *nomeArquivo);
 
+/// @brief cria um bitmap a partir de um
+/// arquivo binario
+/// @param path o camiho para o arquivo
+/// @return o bitmao criado
+/// @pre o caminho levar a um arquivo binario valido
 bitmap *BinReadBitmap(char *path);
 
 #endif

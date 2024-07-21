@@ -75,4 +75,6 @@ tAb* CriaArvoreHuf(tLista* nos);
 
 void DumpArvoreBitmap(tAb *ab, bitmap *bm);
 
+tAb *ReadArvoreBitmap(bitmap *bm);
+
 #endif
