@@ -25,12 +25,39 @@ void BinDumpBitmap(bitmap *bm, char *path, char *nomeArquivo){
 
 	FILE *arq = fopen(dest, "wb");
 	if(!arq)TratarFalhaAlocacao("arquivo do bitmap dump");
+	
 	if(bitmapGetLength(bm) % 8){
 		printf("tamanho do bitmap nao esta redondo. Encerrando...\n");
 		exit(EXIT_FAILURE);
 	}
-	for(int i = 0; i < (bitmapGetLength(bm)/8); i++){
-		fwrite(bitmapGetByte(bm, i), sizeof(unsigned char), 1,arq);
+	
+	unsigned int tam = bitmapGetLength(bm);
+	unsigned char byte;
+	fwrite(&tam, sizeof(unsigned int), 1, arq);
+	for(int i = 0; (i * 8) < tam; i++){
+		byte = bitmapGetByte(bm, i * 8);
+		fwrite(&byte, sizeof(unsigned char), 1, arq);
 	}
+	
+	fclose(arq);
+}
+
+bitmap *BinReadBitmap(char *path){
+	if(!path) TratarStructNula("BinRead", "bitmap ou path");
+
+	FILE *arq = fopen(path, "rb");
+	if(!arq)TratarFalhaAlocacao("arquivo do bitmap dump");
+	
+	unsigned int tam = 0;
+	fread(&tam, sizeof(unsigned int), 1, arq);
+
+	bitmap *bm = bitmapInit(tam);
+
+	unsigned char byte;
+	for(int i = 0; i < (tam/8); i++){
+		fread(&byte, sizeof(unsigned char), 1, arq);
+		bitmapAppendByte(bm, byte);
+	}
+	
 	fclose(arq);
 }

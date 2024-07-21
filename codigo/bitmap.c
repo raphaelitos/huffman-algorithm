@@ -156,10 +156,34 @@ void bitmapAppendByte(bitmap* bm, unsigned char byte) {
  * @pre index < bitmapGetMaxSize(bm) / 8
  * @return O valor do byte.
  */
-unsigned char* bitmapGetByte(bitmap* bm, unsigned int index) {
+/*unsigned char* bitmapGetByte(bitmap* bm, unsigned int index) {
     // Verificar se index está dentro dos limites do bitmap
     assert(index < (bm->max_size / 8), "Acesso a posição inexistente no mapa de bits.");
 
     // Retornar o byte na posição especificada
     return &(bm->contents[index]);
+}*/
+
+/**
+ * Retorna o valor do byte começando na posição bitIndex.
+ * @param bm O mapa de bits.
+ * @param bitIndex A posição inicial em bits.
+ * @pre bitIndex + 8 <= bitmapGetLength(bm)
+ * @return O valor do byte.
+ */
+unsigned char bitmapGetByte(bitmap* bm, unsigned int bitIndex) {
+    assert(bitIndex + 8 <= bm->length, "Não ha bits suficientes apos o indice fornecido.");
+
+    unsigned int byteIndex = bitIndex / 8;
+    unsigned int desloc = bitIndex % 8; 
+
+    unsigned char byte = 0;
+
+    if (desloc == 0) {
+        byte = bm->contents[byteIndex];
+    } else {
+        byte = (bm->contents[byteIndex] << desloc) | (bm->contents[byteIndex + 1] >> (8 - desloc));
+    }
+
+    return byte;
 }

@@ -27,4 +27,6 @@ int EhMesmoTermo(char *str1, char*str2);
 
 void BinDumpBitmap(bitmap *bm, char* path, char *nomeArquivo);
 
+bitmap *BinReadBitmap(char *path);
+
 #endif
