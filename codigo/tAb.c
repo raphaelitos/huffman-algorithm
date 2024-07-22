@@ -63,12 +63,12 @@ unsigned char getChAb(tAb *ab){
 void ImprimeArvore(tAb *ab, int flag){
     if(!ab) return;
     if(ehFolha(ab)){
-        printf("%c\n", ab->ch);
+        printf("%c ", ab->ch);
         return;
     }
     ImprimeArvore(ab->sae, 1);
     ImprimeArvore(ab->sad, 0);
-    printf("%d\n", flag);
+    printf("%d ", flag);
 
 }
 
@@ -130,6 +130,7 @@ void DumpArvoreBitmap(tAb *ab, bitmap *bm){
     if(ehFolha(ab)){
         bitmapAppendLeastSignificantBit(bm, 1);
         bitmapAppendByte(bm, ab->ch);
+        return;
     }
     else{
         bitmapAppendLeastSignificantBit(bm, 0);
@@ -138,4 +139,19 @@ void DumpArvoreBitmap(tAb *ab, bitmap *bm){
     DumpArvoreBitmap(ab->sad, bm);
 }
 
-tAb *ReadArvoreBitmap(bitmap *bm);
+tAb *ReadArvoreBitmap(bitmap *bm, int *index) {
+    if (!bm) TratarStructNula("ReadArvoreBitmap", "bitmap");
+
+    if (bitmapGetBit(bm, *index) == 1) {
+        (*index)++;
+        tAb *folha = CriaAb(bitmapGetByte(bm, *index), 0, NULL, NULL);
+        (*index) += 8;
+        return folha;
+    }
+    tAb *ab = CriaAb('\0', 0, NULL, NULL);
+    (*index)++;
+    ab->sae = ReadArvoreBitmap(bm, index);
+    ab->sad = ReadArvoreBitmap(bm, index);
+
+    return ab;
+}

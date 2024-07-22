@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
 
     int* vet = IniciaVetAscII();
     char path[1000];
-    sprintf(path, "%s/input/biblia.txt", argv[1]);
+    sprintf(path, "%s/input/text.txt", argv[1]);
 
     ContaFreqCaracteres(vet, path);
     PrintVetInt(vet, TAM_ASCII);
@@ -54,6 +54,15 @@ int main(int argc, char *argv[]){
     unsigned char** table = CriaTabelaCodificacao();
     PreencheTabelaCodificacao(table, pilha, arvHuf);
     ImprimeTabela(table);
+
+    printf("ARV ORIGINAL +++++++++++++++++++++++++++++++++++++++++++++\n");
+    ImprimeArvore(arvHuf, -1);
+    bitmap* bm = bitmapInit(1024);
+    DumpArvoreBitmap(arvHuf, bm);
+    int index = 0;
+    tAb* arvHuf2 = ReadArvoreBitmap(bm, &index);
+    printf("\nARV LIDA +++++++++++++++++++++++++++++++++++++++++++++\n");
+    ImprimeArvore(arvHuf2, -1);
 
     /*
     printf("imprimindo arvore original feita: \n");
