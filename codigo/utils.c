@@ -20,18 +20,24 @@ int EhMesmoTermo(char *str1, char*str2){
 
 void BinDumpBitmap(bitmap *bm, char *path, char *nomeArquivo){
 	if(!bm || !path || !nomeArquivo) TratarStructNula("BinDump", "bitmap ou path");
-	char dest[strlen(path) + strlen(nomeArquivo) + 5];
+	char dest[strlen(path) + strlen(nomeArquivo) + 6];
 	sprintf(dest, "%s/%s.bin", path, nomeArquivo);
 
 	FILE *arq = fopen(dest, "wb");
 	if(!arq)TratarFalhaAlocacao("arquivo do bitmap dump");
 	
-	if(bitmapGetLength(bm) % 8){
+	unsigned int tam = bitmapGetLength(bm);
+
+	if(tam % 8){
+	/*
 		printf("tamanho do bitmap nao esta redondo. Encerrando...\n");
 		exit(EXIT_FAILURE);
+	*/
+		for(int b = 0; b < (8 - (tam % 8)); b++){
+			bitmapAppendLeastSignificantBit(bm, 0);
+		}
 	}
-	
-	unsigned int tam = bitmapGetLength(bm);
+	tam = bitmapGetLength(bm);
 	unsigned char byte;
 	fwrite(&tam, sizeof(unsigned int), 1, arq);
 	for(int i = 0; (i * 8) < tam; i++){
@@ -60,4 +66,5 @@ bitmap *BinReadBitmap(char *path){
 	}
 	
 	fclose(arq);
+	return bm;
 }

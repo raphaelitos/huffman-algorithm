@@ -63,6 +63,13 @@ int main(int argc, char *argv[]){
     tAb* arvHuf2 = ReadArvoreBitmap(bm, &index);
     printf("\nARV LIDA +++++++++++++++++++++++++++++++++++++++++++++\n");
     ImprimeArvore(arvHuf2, -1);
+    printf("\n");
+
+    BinDumpBitmap(bm, argv[1], "arvore");
+    bitmap* bmRead = BinReadBitmap("./arvore.bin");
+    index = 0;
+    printf("\nARVORE RECUPERADA DO BITMAP ++++++++++++++++++++++++++++\n");
+    ImprimeArvore(ReadArvoreBitmap(bmRead, &index), -1);
 
     /*
     printf("imprimindo arvore original feita: \n");
