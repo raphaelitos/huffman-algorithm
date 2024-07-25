@@ -34,6 +34,27 @@ void PrintVetInt(int *vet, int tam){
     printf("]\n");
 }
 
+void Descompacta(bitmap* bm, int inic, FILE* arvBin, tAb* arvHuf) {
+    tAb* aux = arvHuf;
+    int bit = 0;
+    bitmap* bmDescomp = bitmapInit(bitmapGetMaxSize(bm));    
+
+    while(inic <= bitmapGetLength(bm)) {
+        if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
+            //BinDumpBitmap(bmDescomp, ...);
+            //SetLengthBitmap(bmDescomp, 0);
+        }
+        if(ehFolha(aux)) {
+            bitmapAppendByte(bmDescomp, getChAb(aux));
+        }
+
+        bit = bitmapGetBit(bm, inic);
+        inic++;
+        if(bit == 0) aux = GetSae(aux);
+        else aux = GetSad(aux);
+    }
+}
+
 int main(int argc, char *argv[]){
     if(argc <= 1){
         printf("Caminho para arquivos não informado. Encerrando programa.\n");
