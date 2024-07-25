@@ -27,21 +27,22 @@ void BinDumpBitmap(bitmap *bm, char *path, char *nomeArquivo){
 	if(!arq)TratarFalhaAlocacao("arquivo do bitmap dump");
 	
 	unsigned int tam = bitmapGetLength(bm);
-
-	if(tam % 8){
-	/*
-		printf("tamanho do bitmap nao esta redondo. Encerrando...\n");
-		exit(EXIT_FAILURE);
-	*/
-		for(int b = 0; b < (8 - (tam % 8)); b++){
-			bitmapAppendLeastSignificantBit(bm, 0);
-		}
-	}
-	tam = bitmapGetLength(bm);
+	unsigned int qtdBytes = tam / 8;
+	unsigned int restoBits = tam % 8;
 	unsigned char byte;
+
 	fwrite(&tam, sizeof(unsigned int), 1, arq);
-	for(int i = 0; (i * 8) < tam; i++){
+	for(int i = 0; i < qtdBytes ; i++){
 		byte = bitmapGetByte(bm, i * 8);
+		fwrite(&byte, sizeof(unsigned char), 1, arq);
+	}
+	if(restoBits){
+		byte = (unsigned char)0;
+		for(int b = 0; b < restoBits; b++){
+			byte |= bitmapGetBit(bm, ((qtdBytes * 8) + b)) << (7 - b);
+		}
+		/*byte preenchido com os n bits do ultimo byte
+		do bitmap, caso esse byte nao esteja cheio*/
 		fwrite(&byte, sizeof(unsigned char), 1, arq);
 	}
 	
@@ -54,15 +55,30 @@ bitmap *BinReadBitmap(char *path){
 	FILE *arq = fopen(path, "rb");
 	if(!arq)TratarFalhaAlocacao("arquivo do bitmap dump");
 	
-	unsigned int tam = 0;
+	unsigned int tam;
 	fread(&tam, sizeof(unsigned int), 1, arq);
+
+	unsigned int qtdBytes = tam / 8;
+	unsigned int restoBits = tam % 8;
+	unsigned char byte;
 
 	bitmap *bm = bitmapInit(tam);
 
-	unsigned char byte;
-	for(int i = 0; i < (tam/8); i++){
+	for(int i = 0; i < qtdBytes; i++){
 		fread(&byte, sizeof(unsigned char), 1, arq);
 		bitmapAppendByte(bm, byte);
+	}
+	if(restoBits){
+		fread(&byte, sizeof(unsigned char), 1, arq);
+		unsigned char bit;
+		for(int b = 0; b < restoBits; b++){
+			bit = (byte >> (7 - b)) & 0x01;
+			/*se tam nao representar um valor inteiro de bytes,
+			os n (tam % 8) bits mais significativos de byte sao
+			colocados no bitmap*/
+			
+			bitmapAppendLeastSignificantBit(bm ,bit);
+		}
 	}
 	
 	fclose(arq);

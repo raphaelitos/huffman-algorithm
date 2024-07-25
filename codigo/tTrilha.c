@@ -16,6 +16,7 @@ static tCelDado *criaCelDado(unsigned char info){
     if(!nova)TratarFalhaAlocacao("celDado");
     nova->info = info;
     nova->prox = nova->ant = NULL;
+    return nova;
 }
 
 static void desalocaCelDado(tCelDado *c){
@@ -145,6 +146,7 @@ void PreencheTabelaCodificacao(unsigned char** table, tTrilha* t, tAb* ab) {
     if(ehFolha(ab)) {
         int index = (int)getChAb(ab);
         table[index] = getInfoTrilha(t);
+        return;
     } 
     else {
         PushTrilha(t, ESQUERDA);

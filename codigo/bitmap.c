@@ -147,20 +147,6 @@ void bitmapAppendByte(bitmap* bm, unsigned char byte) {
     }
 }
 
-/**
- * Retorna o valor do byte na posição index.
- * @param bm O mapa de bits.
- * @param index A posição do byte.
- * @pre index < bitmapGetMaxSize(bm) / 8
- * @return O valor do byte.
- */
-/*unsigned char* bitmapGetByte(bitmap* bm, unsigned int index) {
-    // Verificar se index está dentro dos limites do bitmap
-    assert(index < (bm->max_size / 8), "Acesso a posição inexistente no mapa de bits.");
-
-    // Retornar o byte na posição especificada
-    return &(bm->contents[index]);
-}*/
 
 /**
  * Retorna o valor do byte começando na posição bitIndex.

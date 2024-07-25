@@ -78,7 +78,9 @@ int main(int argc, char *argv[]){
 
     printf("ARV ORIGINAL +++++++++++++++++++++++++++++++++++++++++++++\n");
     ImprimeArvore(arvHuf, -1);
+    
     bitmap* bm = bitmapInit(1024);
+    
     DumpArvoreBitmap(arvHuf, bm);
     int index = 0;
     tAb* arvHuf2 = ReadArvoreBitmap(bm, &index);
@@ -127,8 +129,10 @@ int main(int argc, char *argv[]){
     DesalocaTrilha(pilha);
     DesalocaTabelaCodificacao(table);
     DesalocaaAb(arvHuf);
-    //DesalocaaAb(arvLida);
+    DesalocaaAb(arvHuf2);
     DesalocaLista(nos);
+    bitmapLibera(bm);
+    bitmapLibera(bmRead);
     free(vet);    
 
     return 0;
