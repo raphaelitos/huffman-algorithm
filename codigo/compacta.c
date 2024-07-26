@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
     sprintf(path, "%s/input/text.txt", argv[1]);
 
     ContaFreqCaracteres(vet, path);
-    PrintVetInt(vet, TAM_ASCII);
+    //PrintVetInt(vet, TAM_ASCII);
 
     tLista *nos = CriaListaNos(vet);
     tAb *arvHuf = CriaArvoreHuf(nos);
@@ -97,8 +97,9 @@ int main(int argc, char *argv[]){
     BinDumpBitmap(bm, argv[1], "arvore");
     bitmap* bmRead = BinReadBitmap("./arvore.bin");
     index = 0;
+    tAb *abRd = ReadArvoreBitmap(bmRead, &index);
     printf("\nARVORE RECUPERADA DO BITMAP ++++++++++++++++++++++++++++\n");
-    ImprimeArvore(ReadArvoreBitmap(bmRead, &index), -1);
+    ImprimeArvore(abRd, -1);
 
     /*
     printf("imprimindo arvore original feita: \n");
@@ -136,6 +137,7 @@ int main(int argc, char *argv[]){
     DesalocaTabelaCodificacao(table);
     DesalocaaAb(arvHuf);
     DesalocaaAb(arvHuf2);
+    DesalocaaAb(abRd);
     DesalocaLista(nos);
     bitmapLibera(bm);
     bitmapLibera(bmRead);
