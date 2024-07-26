@@ -5,6 +5,21 @@
 #include "tTrilha.h"
 #include "utils.h"
 
+#define EXTENSAO ".comp"
+
+void Compacta(char *nomeArquivo, char **table){
+    char pathIn[strlen(nomeArquivo) + 3];
+    sprintf(pathIn, "./%s", nomeArquivo);
+
+    char pathOut[strlen(nomeArquivo) + strlen(EXTENSAO) + 3];
+    sprintf(pathOut, "./%s%s", nomeArquivo, EXTENSAO);
+
+
+    FILE *entrada = fopen(pathIn, "rb");
+    FILE *saida = fopen(pathOut, "ab");
+}
+
+
 void Descompacta(bitmap* bm, int inic, char* path, tAb* arvHuf) {
     tAb* aux = arvHuf;
     int bit = 0;
