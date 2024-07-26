@@ -25,6 +25,12 @@ void TratarFalhaAlocacao(const char *nomeStruct);
 */
 int EhMesmoTermo(char *str1, char*str2);
 
+int *IniciaVetAscII();
+
+void ContaFreqCaracteres(int *vet, char *path);
+
+void PrintVetInt(int *vet, int tam);
+
 /// @brief salva bm num arquivo binario  
 /// @param bm um bitmap valido
 /// @param path o caminho para o diretorio de bm

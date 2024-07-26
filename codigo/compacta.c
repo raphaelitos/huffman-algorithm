@@ -5,35 +5,6 @@
 #include "tTrilha.h"
 #include "utils.h"
 
-int *IniciaVetAscII(){
-    int *vet = (int*)calloc(TAM_ASCII, sizeof(int));
-    if(!vet) exit(EXIT_FAILURE);
-    return vet;
-}
-
-void ContaFreqCaracteres(int *vet, char *path){
-    FILE *arq = fopen(path, "rb");
-    if(!arq) exit(EXIT_FAILURE);
-    
-    unsigned char byte;
-    while (fread(&byte, sizeof(unsigned char), 1, arq) == 1) {
-        vet[byte]++;
-    }
-
-    fclose(arq);
-}
-
-void PrintVetInt(int *vet, int tam){
-    if(!vet) return;
-    printf("[ ");
-    for(int i = 0; i < tam; i++){
-        if(vet[i]){
-            printf("%c ", (unsigned char)i);
-        }
-    }
-    printf("]\n");
-}
-
 void Descompacta(bitmap* bm, int inic, char* path, tAb* arvHuf) {
     tAb* aux = arvHuf;
     int bit = 0;
