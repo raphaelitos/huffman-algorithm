@@ -34,24 +34,30 @@ void PrintVetInt(int *vet, int tam){
     printf("]\n");
 }
 
-void Descompacta(bitmap* bm, int inic, FILE* arvBin, tAb* arvHuf) {
+void Descompacta(bitmap* bm, int inic, char* path, tAb* arvHuf) {
     tAb* aux = arvHuf;
     int bit = 0;
     bitmap* bmDescomp = bitmapInit(bitmapGetMaxSize(bm));    
 
-    while(inic <= bitmapGetLength(bm)) {
+    while(inic < bitmapGetLength(bm)) {
         if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
-            //BinDumpBitmap(bmDescomp, ...);
-            //SetLengthBitmap(bmDescomp, 0);
+            BinDumpBitmap(bmDescomp, path, "saida");
+            SetLengthBitmap(bmDescomp, 0);
         }
         if(ehFolha(aux)) {
             bitmapAppendByte(bmDescomp, getChAb(aux));
+            aux = arvHuf; //reset da árvore para o próximo caractere
         }
 
         bit = bitmapGetBit(bm, inic);
         inic++;
         if(bit == 0) aux = GetSae(aux);
         else aux = GetSad(aux);
+    }
+
+    //Salva o ultimo bitmap descompactado que ficou incompleto
+    if (bitmapGetLength(bmDescomp) > 0) {
+        BinDumpBitmap(bmDescomp, path, "saida");
     }
 }
 

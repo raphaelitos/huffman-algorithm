@@ -171,3 +171,13 @@ unsigned char bitmapGetByte(bitmap* bm, unsigned int bitIndex) {
 
     return byte;
 }
+
+/**
+ * Atualiza o tamanho do mapa de bits para o valor dado (passar lenght = 0 eh semelhante a "limpar" o bitmap).
+ * @param bm O mapa de bits.
+ * @param length O novo tamanho do mapa de bits.
+ * @pre Bitmap devidamente alocado | 0 <= length <= bitmapGetMaxSieze(bm).
+ */
+void SetLengthBitmap(bitmap* bm, unsigned int length) {
+    bm->length = 0;
+}
