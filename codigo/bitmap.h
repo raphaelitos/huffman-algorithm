@@ -31,6 +31,6 @@ void bitmapAppendByte(bitmap* bm, unsigned char byte);
 
 unsigned char bitmapGetByte(bitmap* bm, unsigned int bitIndex);
 
-void SetLengthBitmap(bitmap* bm, unsigned int length);
+void ResetBitmap(bitmap* bm);
 
 #endif /*BITMAP_H_*/
