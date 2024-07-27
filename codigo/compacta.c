@@ -113,6 +113,12 @@ int main(int argc, char *argv[]){
     printf("\nARVORE RECUPERADA DO BITMAP ++++++++++++++++++++++++++++\n");
     ImprimeArvore(abRd, -1);
 
+    printf("\nTESTE BITMAPS ============\n");
+    printf("original\n");
+    printMapContents(bm);
+    printf("\nlido\n");
+    printMapContents(bmRead);
+
     /*
     printf("imprimindo arvore original feita: \n");
     ImprimeArvore(arvHuf, -1);

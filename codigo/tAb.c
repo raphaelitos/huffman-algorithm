@@ -142,6 +142,8 @@ void DumpArvoreBitmap(tAb *ab, bitmap *bm){
 tAb *ReadArvoreBitmap(bitmap *bm, int *index) {
     if (!bm) TratarStructNula("ReadArvoreBitmap", "bitmap");
 
+    if(*index >= bitmapGetLength(bm)) return NULL;
+
     if (bitmapGetBit(bm, *index) == 1) {
         (*index)++;
         tAb *folha = CriaAb(bitmapGetByte(bm, *index), 0, NULL, NULL);

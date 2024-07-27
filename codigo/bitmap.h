@@ -33,4 +33,6 @@ unsigned char bitmapGetByte(bitmap* bm, unsigned int bitIndex);
 
 void ResetBitmap(bitmap* bm);
 
+void printMapContents(bitmap *m);
+
 #endif /*BITMAP_H_*/

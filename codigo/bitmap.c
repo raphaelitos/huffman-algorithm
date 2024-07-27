@@ -147,7 +147,6 @@ void bitmapAppendByte(bitmap* bm, unsigned char byte) {
     }
 }
 
-
 /**
  * Retorna o valor do byte começando na posição bitIndex.
  * @param bm O mapa de bits.
@@ -180,4 +179,29 @@ unsigned char bitmapGetByte(bitmap* bm, unsigned int bitIndex) {
  */
 void ResetBitmap(bitmap* bm) {
     bm->length = 0;
+}
+
+void printMapContents(bitmap *m) {
+    if (!m) {
+        printf("Estrutura map é nula.\n");
+        return;
+    }
+
+    printf("Max size: %u bits\n", m->max_size);
+    printf("Length: %u bits\n", m->length);
+    printf("Contents:\n");
+
+    unsigned int qtdBytes = (m->length + 7) / 8; // Calcular o número total de bytes necessários
+
+    for (unsigned int i = 0; i < qtdBytes; i++) {
+        // Imprimir em formato hexadecimal
+        printf("Byte %u: 0x%02X\n", i, m->contents[i]);
+
+        // Imprimir em formato binário
+        printf("Bits: ");
+        for (int b = 7; b >= 0; b--) {
+            printf("%u", (m->contents[i] >> b) & 1);
+        }
+        printf("\n");
+    }
 }
