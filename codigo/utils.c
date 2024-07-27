@@ -50,9 +50,9 @@ void PrintVetInt(int *vet, int tam){
 void BinDumpBitmap(bitmap *bm, char *path, char *nomeArquivo){
 	if(!bm || !path || !nomeArquivo) TratarStructNula("BinDump", "bitmap ou path");
 	char dest[strlen(path) + strlen(nomeArquivo) + 6];
-	sprintf(dest, "%s/%s.bin", path, nomeArquivo);
+	sprintf(dest, "%s/%s.bin", path, nomeArquivo);// esse .bin aqui ta suspeito
 
-	FILE *arq = fopen(dest, "wb");
+	FILE *arq = fopen(dest, "ab");
 	if(!arq)TratarFalhaAlocacao("arquivo do bitmap dump");
 	
 	unsigned int tam = bitmapGetLength(bm);

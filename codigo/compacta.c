@@ -5,18 +5,44 @@
 #include "tTrilha.h"
 #include "utils.h"
 
-#define EXTENSAO ".comp"
-
 void Compacta(char *nomeArquivo, char **table){
+    
+    bitmap *bmComp = bitmapInit(1024);
+
     char pathIn[strlen(nomeArquivo) + 3];
     sprintf(pathIn, "./%s", nomeArquivo);
 
-    char pathOut[strlen(nomeArquivo) + strlen(EXTENSAO) + 3];
-    sprintf(pathOut, "./%s%s", nomeArquivo, EXTENSAO);
-
 
     FILE *entrada = fopen(pathIn, "rb");
-    FILE *saida = fopen(pathOut, "ab");
+    if(!entrada)TratarFalhaAlocacao("arqIn compacta");
+
+    char pathOut[2] = ".";
+
+    unsigned char byte;
+    while(1){
+        fread(&byte, sizeof(unsigned char), 1, entrada);
+
+        if((int)byte == EOF){
+            return;
+        }
+
+        unsigned char *code = table[(unsigned int)byte];
+        int tamStr = strlen(code);
+
+        if((bitmapGetLength(bmComp) + tamStr) >= bitmapGetMaxSize(bmComp)){
+            //aparentemente essa funcao nao precisa desse tanto de argumentos
+            //ja que path vai ser sempre "."
+            BinDumpBitmap(bmComp, pathOut, nomeArquivo);
+            ResetBitmap(bmComp);
+        }
+
+        for(int i = 0; i < tamStr; i++){
+            bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
+        }
+    }
+    BinDumpBitmap(bmComp, pathOut, nomeArquivo);
+    bitmapLibera(bmComp);
+    fclose(entrada);
 }
 
 

@@ -7,6 +7,8 @@
 #define ESQUERDA '0'
 #define DIREITA '1'
 
+#define EXTENSAO ".comp"
+
 
 /**
  * Encerra o programa apos avisar a funcao onde isso
