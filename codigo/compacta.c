@@ -54,7 +54,7 @@ void Descompacta(bitmap* bm, int inic, char* path, tAb* arvHuf) {
     while(inic < bitmapGetLength(bm)) {
         if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
             BinDumpBitmap(bmDescomp, path, "saida");
-            SetLengthBitmap(bmDescomp, 0);
+            //SetLengthBitmap(bmDescomp, 0);
         }
         if(ehFolha(aux)) {
             bitmapAppendByte(bmDescomp, getChAb(aux));
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]){
 
     int* vet = IniciaVetAscII();
     char path[1000];
-    sprintf(path, "%s/input/text.txt", argv[1]);
+    sprintf(path, "%s/input/biblia.txt", argv[1]);
 
     ContaFreqCaracteres(vet, path);
     //PrintVetInt(vet, TAM_ASCII);
