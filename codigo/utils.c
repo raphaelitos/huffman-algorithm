@@ -90,12 +90,11 @@ void BinDumpBitmap(bitmap *bm, char *path, char *nomeArquivo){
 	unsigned int tam = bitmapGetLength(bm);
 	unsigned int qtdBytes = tam / 8;
 	unsigned int restoBits = tam % 8;
-	unsigned char byte;
 
 	fwrite(&tam, sizeof(unsigned int), 1, arq);
 	fwrite(bitmapGetContents(bm), sizeof(unsigned char), qtdBytes, arq);
 	if(restoBits){
-		byte = (unsigned char)0;
+		unsigned char byte = (unsigned char)0;
 		for(int b = 0; b < restoBits; b++){
 			byte |= bitmapGetBit(bm, ((qtdBytes * 8) + b)) << (7 - b);
 		}
@@ -160,38 +159,40 @@ bitmap *BinReadBitmap(char *path) {
     unsigned int tam;
     fread(&tam, sizeof(unsigned int), 1, arq);
 
-    unsigned int qtdBytes = (tam + 7) / 8;
+    unsigned int qtdBytes = tam / 8;
 	unsigned int restoBits = tam % 8;
-    unsigned char *contents = (unsigned char *)malloc(qtdBytes);
-    if (!contents) {
+	int resto = 0;
+	if(restoBits) resto++;
+
+    unsigned char *contents = (unsigned char *)malloc(qtdBytes + resto);
+    if(!contents) {
         fclose(arq);
         TratarFalhaAlocacao("alocação da memória para o bitmap");
         return NULL;
     }
 
-    fread(contents, sizeof(unsigned char), qtdBytes, arq);
-
-    fclose(arq);
+    fread(contents, sizeof(unsigned char), qtdBytes + resto, arq);
 
     bitmap *bm = bitmapInit(tam);
-    if (!bm) {
+    if(!bm) {
         free(contents);
         TratarFalhaAlocacao("inicialização do bitmap");
         return NULL;
     }
 
-    for (unsigned int i = 0; i < qtdBytes; i++) {
+    for(int i = 0; i < qtdBytes; i++) {
         bitmapAppendByte(bm, contents[i]);
     }
 
-	if (restoBits) {
-        unsigned char byte = contents[qtdBytes];
-        for (unsigned int b = 0; b < restoBits; b++) {
+	if(restoBits) {
+        unsigned char byte = contents[qtdBytes + resto];
+        for(unsigned int b = 0; b < restoBits; b++) {
             unsigned char bit = (byte >> (7 - b)) & 0x01;
             bitmapAppendLeastSignificantBit(bm, bit);
         }
     }
 
+    fclose(arq);
     free(contents);
     return bm;
 }
