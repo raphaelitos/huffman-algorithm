@@ -28,15 +28,21 @@ void Compacta(char *nomeArquivo, char **table){
 
         unsigned char *code = table[(unsigned int)byte];
         int tamStr = strlen(code);
+        int tamBm = bitmapGetLength(bmComp);
+        int max = bitmapGetMaxSize(bmComp);
+        int i = 0;
 
-        if((bitmapGetLength(bmComp) + tamStr) >= bitmapGetMaxSize(bmComp)){
-            //aparentemente essa funcao nao precisa desse tanto de argumentos
-            //ja que path vai ser sempre "."
+        if((tamBm + tamStr) >= max){
+            
+            for(i = 0; i < (max - tamBm); i++){
+                bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
+            }
+
             BinDumpBitmap(bmComp, pathOut, nomeArquivo);
             ResetBitmap(bmComp);
         }
 
-        for(int i = 0; i < tamStr; i++){
+        for(i; i < tamStr; i++){
             bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
         }
     }
@@ -118,36 +124,6 @@ int main(int argc, char *argv[]){
     printMapContents(bm);
     printf("\nlido\n");
     printMapContents(bmRead);
-
-    /*
-    printf("imprimindo arvore original feita: \n");
-    ImprimeArvore(arvHuf, -1);
-    printf("\n");
-
-    FILE *binFile = fopen("output.bin", "wb");
-    if (binFile == NULL) {
-        printf("Erro ao criar o arquivo binário.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    WriteBinAb(arvHuf, binFile);
-
-    fclose(binFile);
-
-    binFile = fopen("output.bin", "rb");
-    if (binFile == NULL) {
-        printf("Erro ao abrir o arquivo binário para leitura.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    tAb* arvLida = ReadBinAb(binFile);
-
-    printf("\nimprimindo arvore lida do arq bin: \n");
-    ImprimeArvore(arvLida, -1);
-    printf("\n");
-
-    fclose(binFile);
-    */
 
     // Desalocação e limpeza
 

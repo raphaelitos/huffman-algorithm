@@ -90,8 +90,13 @@ void BinDumpBitmap(bitmap *bm, char *path, char *nomeArquivo){
 	unsigned int tam = bitmapGetLength(bm);
 	unsigned int qtdBytes = tam / 8;
 	unsigned int restoBits = tam % 8;
-
-	fwrite(&tam, sizeof(unsigned int), 1, arq);
+	unsigned char c = 's';
+	if(tam == bitmapGetMaxSize(bm)) c = 'n';
+	
+	fwrite(&c, sizeof(unsigned char), 1, arq);
+	
+	if(tam != bitmapGetMaxSize(bm)) fwrite(&tam, sizeof(unsigned int), 1, arq);
+	
 	fwrite(bitmapGetContents(bm), sizeof(unsigned char), qtdBytes, arq);
 	if(restoBits){
 		unsigned char byte = (unsigned char)0;
@@ -156,8 +161,13 @@ bitmap *BinReadBitmap(char *path) {
         return NULL;
     }
 
+	unsigned char c;
+	fread(&c, sizeof(unsigned char), 1, arq);
     unsigned int tam;
-    fread(&tam, sizeof(unsigned int), 1, arq);
+
+	if(c != 'n') tam = 1024;
+
+    else fread(&tam, sizeof(unsigned int), 1, arq);
 
     unsigned int qtdBytes = tam / 8;
 	unsigned int restoBits = tam % 8;
