@@ -80,7 +80,7 @@ void PushTrilha(tTrilha *p, unsigned char bit){
     (p->tam)++;
 }
 
-char PopTrilha(tTrilha *p){
+unsigned char PopTrilha(tTrilha *p){
     if(!p) TratarStructNula("retira", "Trilha");
     if(EstaVaziaTrilha(p)){
         return '\0';
@@ -167,7 +167,7 @@ static void ImprimePilha(tTrilha* pilha) {
 }
 
 void ImprimeTabela(unsigned char** table) {
-    for (int i = 0; i < 127; i++) {
+    for (int i = 0; i < TAM_ASCII; i++) {
         if (table[i] != NULL) {
             printf("Tabela[%c]: ", (char)i);
             //ImprimePilha(table[i]);

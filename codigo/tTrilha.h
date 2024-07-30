@@ -13,7 +13,7 @@ tTrilha *ClonaTrilha(tTrilha *p);
 
 void PushTrilha(tTrilha *p, unsigned char c);
 
-char PopTrilha(tTrilha *p);
+unsigned char PopTrilha(tTrilha *p);
 
 int getSizeTrilha(tTrilha *p);
 
