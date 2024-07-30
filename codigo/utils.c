@@ -50,7 +50,6 @@ void PrintVetInt(int *vet, int tam){
 void BinDumpBitmap(bitmap *bm, char *nomeArquivo){
 	if(!bm || !nomeArquivo) TratarStructNula("BinDump", "bitmap ou path");
 	char dest[strlen(nomeArquivo) + 6];
-	//sprintf(dest, "./%s.bin", nomeArquivo);// esse .bin aqui ta suspeito
 
 	FILE *arq = fopen(nomeArquivo, "ab");
 	if(!arq)TratarFalhaAlocacao("arquivo do bitmap dump");
@@ -95,13 +94,16 @@ bitmap *BinReadBitmap(char *path) {
 
     unsigned char c;
     unsigned int tam;
-    fread(&c, sizeof(unsigned char), 1, arq);
+    size_t bytesRd = fread(&c, sizeof(unsigned char), 1, arq);
 
-	if((int)c == EOF) return NULL;
+	if(bytesRd != 1) return NULL;
 
-    if(c == 'n') tam = 1024;
-    else fread(&tam, sizeof(unsigned int), 1, arq);
-
+    if(c == 'n'){
+        tam = UM_MEGA;
+    }
+    else{
+        fread(&tam, sizeof(unsigned int), 1, arq);
+    }
     unsigned int qtdBytes = tam / 8;
     unsigned int restoBits = tam % 8;
 
@@ -120,13 +122,14 @@ bitmap *BinReadBitmap(char *path) {
         TratarFalhaAlocacao("bitmap em readBin");
         return NULL;
     }
-
+    printf("qtdBytes: %d\n", qtdBytes);
     for(int i = 0; i < qtdBytes; i++) {
         printf("Teste\n");
         bitmapAppendByte(bm, contents[i]);
     }
 
     if(restoBits) {
+        printf("entrando no byte quebrado\n");
         unsigned char byte = contents[qtdBytes];
         for(unsigned int b = 0; b < restoBits; b++) {
             unsigned char bit = (byte >> (7 - b)) & 0x01;

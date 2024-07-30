@@ -7,7 +7,7 @@
 
 void Compacta(char *nomeArquivo, unsigned char **table){
     
-    bitmap *bmComp = bitmapInit(1024);
+    bitmap *bmComp = bitmapInit(UM_MEGA);
 
     FILE *entrada = fopen(nomeArquivo, "rb");
     if(!entrada)TratarFalhaAlocacao("arqIn compacta");
@@ -93,20 +93,39 @@ void Descompacta(char* nomeArquivoIn) {
     }
 }
 
+void TestaArquivos(FILE *a1, FILE *a2){
+    char ch1, ch2;
+    if (!a1 || !a2) {
+        TratarStructNula("testaArquivos", "arquivos");
+    }
+    int result = 1;
+    while (fread(&ch1, sizeof(char), 1, a1) && fread(&ch2, sizeof(char), 1, a2)) {
+        if (ch1 != ch2) {
+            result = 0;
+            break;
+        }
+    }
+    if (result && feof(a1) && feof(a2)) {
+        printf("Teste bem-sucedido: O arquivo descompactado é igual ao original.\n");
+    } else {
+        printf("Teste falhou: O arquivo descompactado é diferente do original.\n");
+    }
+}
+
 int main(int argc, char *argv[]) {
     if (argc <= 1) {
         printf("Caminho para o arquivo não informado. Encerrando o programa.\n");
         return EXIT_FAILURE;
     }
 
-    char *inputFile = argv[1];
-    char compactedFile[strlen(inputFile) + strlen(EXTENSAO) + 1];
-    sprintf(compactedFile, "%s%s", inputFile, EXTENSAO);
-    char outputFile[] = "output.txt";
+    char *inputPath = argv[1];
+    char compactedFile[strlen(inputPath) + strlen(EXTENSAO) + 1];
+    sprintf(compactedFile, "%s%s", inputPath, EXTENSAO);
+    char outputPath[] = "output.txt";
 
     // Inicializa as estruturas necessárias
     int *vet = IniciaVetAscII();
-    ContaFreqCaracteres(vet, inputFile);
+    ContaFreqCaracteres(vet, inputPath);
 
     tLista *nos = CriaListaNos(vet);
     tAb *arvHuf = CriaArvoreHuf(nos);
@@ -116,7 +135,7 @@ int main(int argc, char *argv[]) {
     PreencheTabelaCodificacao(table, pilha, arvHuf);
 
     //colocando a arvore no binario
-    bitmap* bm = bitmapInit(1024);
+    bitmap* bm = bitmapInit(UM_MEGA);
     DumpArvoreBitmap(arvHuf, bm);
     BinDumpBitmap(bm, compactedFile);
     bitmapLibera(bm);
@@ -124,35 +143,17 @@ int main(int argc, char *argv[]) {
     ImprimeTabela(table);
     printf("Comecou a compactar\n");
     // Compacta o arquivo de entrada
-    Compacta(inputFile, table);
+    Compacta(inputPath, table);
 
     printf("Comecou a descompactar\n");
     // Descompacta o arquivo compactado
     Descompacta(compactedFile);
 
     // Verifica se o arquivo descompactado é igual ao arquivo original
-    FILE *original = fopen(inputFile, "rb");
-    FILE *descompacted = fopen(outputFile, "rb");
-
-    if (!original || !descompacted) {
-        perror("Erro ao abrir arquivos para verificação");
-        return EXIT_FAILURE;
-    }
-
-    int result = 1;
-    char ch1, ch2;
-    while (fread(&ch1, sizeof(char), 1, original) && fread(&ch2, sizeof(char), 1, descompacted)) {
-        if (ch1 != ch2) {
-            result = 0;
-            break;
-        }
-    }
-
-    if (result && feof(original) && feof(descompacted)) {
-        printf("Teste bem-sucedido: O arquivo descompactado é igual ao original.\n");
-    } else {
-        printf("Teste falhou: O arquivo descompactado é diferente do original.\n");
-    }
+    FILE *original = fopen(inputPath, "rb");
+    FILE *descompacted = fopen(outputPath, "rb");
+    
+    TestaArquivos(original, descompacted);
 
     fclose(original);
     fclose(descompacted);
