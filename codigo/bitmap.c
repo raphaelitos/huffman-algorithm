@@ -139,7 +139,7 @@ void bitmapLibera (bitmap* bm){
  * @post Os bits do byte são adicionados ao final do mapa de bits
  */
 void bitmapAppendByte(bitmap* bm, unsigned char byte) {
-    assert(bm->length + 8 <= bm->max_size, "Tamanho máximo excedido no mapa de bits.");
+    assert(bm->length + 8 <= bm->max_size, "Tamanho maximo excedido no mapa de bits.");
 
     for (int i = 7; i >= 0; i--) {
         unsigned char bit = (byte >> i) & 0x01;

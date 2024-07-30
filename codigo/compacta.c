@@ -5,7 +5,7 @@
 #include "tTrilha.h"
 #include "utils.h"
 
-void Compacta(char *nomeArquivo, char **table){
+void Compacta(char *nomeArquivo, unsigned char **table){
     
     bitmap *bmComp = bitmapInit(1024);
 
@@ -17,11 +17,9 @@ void Compacta(char *nomeArquivo, char **table){
 
     unsigned char byte;
     while(1){
-        fread(&byte, sizeof(unsigned char), 1, entrada);
+        size_t bytesRead = fread(&byte, sizeof(unsigned char), 1, entrada);
 
-        if((int)byte == EOF){
-            break;
-        }
+        if(bytesRead != 1) break;
 
         unsigned char *code = table[(unsigned int)byte];
         int tamStr = strlen(code);
@@ -49,15 +47,14 @@ void Compacta(char *nomeArquivo, char **table){
     fclose(entrada);
 }
 
-
-void Descompacta(bitmap* bm, int inic, char* path, tAb* arvHuf) {
+static void DescompactaBitmap(bitmap* bm, int inic, char* pathOut, tAb* arvHuf) {
     tAb* aux = arvHuf;
     int bit = 0;
     bitmap* bmDescomp = bitmapInit(bitmapGetMaxSize(bm));    
 
     while(inic < bitmapGetLength(bm)) {
         if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
-            BinDumpBitmap(bmDescomp, path);
+            BinDumpBitmap(bmDescomp, pathOut);
         }
         if(ehFolha(aux)) {
             bitmapAppendByte(bmDescomp, getChAb(aux));
@@ -72,67 +69,100 @@ void Descompacta(bitmap* bm, int inic, char* path, tAb* arvHuf) {
 
     //Salva o ultimo bitmap descompactado que ficou incompleto
     if (bitmapGetLength(bmDescomp) > 0) {
-        BinDumpBitmap(bmDescomp, path);
+        BinDumpBitmap(bmDescomp, pathOut);
     }
 }
 
-int main(int argc, char *argv[]){
-    if(argc <= 1){
-        printf("Caminho para arquivos não informado. Encerrando programa.\n");
-        exit(EXIT_FAILURE);
+void Descompacta(char* nomeArquivoIn) {
+    char pathOut[strlen(nomeArquivoIn) - strlen(EXTENSAO) + 1];
+    sscanf(nomeArquivoIn, "%s.comp", pathOut);
+
+    int index = 0;
+    bitmap* bm = BinReadBitmap(nomeArquivoIn);
+    tAb* arvHuf = ReadArvoreBitmap(bm, &index);
+    bitmapLibera(bm);
+
+    while(1){
+        bm = BinReadBitmap(nomeArquivoIn);
+        if(bm == NULL) break;
+
+        DescompactaBitmap(bm, index, pathOut, arvHuf);
+
+        bitmapLibera(bm);
+        index = 0;
+    }
+}
+
+int main(int argc, char *argv[]) {
+    if (argc <= 1) {
+        printf("Caminho para o arquivo não informado. Encerrando o programa.\n");
+        return EXIT_FAILURE;
     }
 
-    int* vet = IniciaVetAscII();
-    //char path[1000];
-    //sprintf(path, "%s/input/biblia.txt", argv[1]);
+    char *inputFile = argv[1];
+    char compactedFile[strlen(inputFile) + strlen(EXTENSAO) + 1];
+    sprintf(compactedFile, "%s%s", inputFile, EXTENSAO);
+    char outputFile[] = "output.txt";
 
-    ContaFreqCaracteres(vet, argv[1]);
-    //PrintVetInt(vet, TAM_ASCII);
+    // Inicializa as estruturas necessárias
+    int *vet = IniciaVetAscII();
+    ContaFreqCaracteres(vet, inputFile);
 
     tLista *nos = CriaListaNos(vet);
     tAb *arvHuf = CriaArvoreHuf(nos);
 
-    tTrilha* pilha = CriaTrilha();
-    unsigned char** table = CriaTabelaCodificacao();
+    tTrilha *pilha = CriaTrilha();
+    unsigned char **table = CriaTabelaCodificacao();
     PreencheTabelaCodificacao(table, pilha, arvHuf);
-    //ImprimeTabela(table);
 
-    printf("ARV ORIGINAL +++++++++++++++++++++++++++++++++++++++++++++\n");
-    ImprimeArvore(arvHuf, -1);
-    
+    //colocando a arvore no binario
     bitmap* bm = bitmapInit(1024);
-    
     DumpArvoreBitmap(arvHuf, bm);
-    int index = 0;
-    tAb* arvHuf2 = ReadArvoreBitmap(bm, &index);
-    printf("\nARV LIDA +++++++++++++++++++++++++++++++++++++++++++++\n");
-    ImprimeArvore(arvHuf2, -1);
-    printf("\n");
+    BinDumpBitmap(bm, compactedFile);
+    bitmapLibera(bm);
 
-    BinDumpBitmap(bm, "arvore.bin");
-    bitmap* bmRead = BinReadBitmap("arvore.bin");
-    index = 0;
-    tAb *abRd = ReadArvoreBitmap(bmRead, &index);
-    printf("\nARVORE RECUPERADA DO BITMAP ++++++++++++++++++++++++++++\n");
-    ImprimeArvore(abRd, -1);
+    ImprimeTabela(table);
+    printf("Comecou a compactar\n");
+    // Compacta o arquivo de entrada
+    Compacta(inputFile, table);
 
-    printf("\nTESTE BITMAPS ============\n");
-    printf("\nORIGINAL\n");
-    printMapContents(bm);
-    printf("\nLIDO\n");
-    printMapContents(bmRead);
+    printf("Comecou a descompactar\n");
+    // Descompacta o arquivo compactado
+    Descompacta(compactedFile);
 
-    // Desalocação e limpeza
+    // Verifica se o arquivo descompactado é igual ao arquivo original
+    FILE *original = fopen(inputFile, "rb");
+    FILE *descompacted = fopen(outputFile, "rb");
 
+    if (!original || !descompacted) {
+        perror("Erro ao abrir arquivos para verificação");
+        return EXIT_FAILURE;
+    }
+
+    int result = 1;
+    char ch1, ch2;
+    while (fread(&ch1, sizeof(char), 1, original) && fread(&ch2, sizeof(char), 1, descompacted)) {
+        if (ch1 != ch2) {
+            result = 0;
+            break;
+        }
+    }
+
+    if (result && feof(original) && feof(descompacted)) {
+        printf("Teste bem-sucedido: O arquivo descompactado é igual ao original.\n");
+    } else {
+        printf("Teste falhou: O arquivo descompactado é diferente do original.\n");
+    }
+
+    fclose(original);
+    fclose(descompacted);
+
+    // Desaloca as estruturas
     DesalocaTrilha(pilha);
     DesalocaTabelaCodificacao(table);
     DesalocaaAb(arvHuf);
-    DesalocaaAb(arvHuf2);
-    DesalocaaAb(abRd);
     DesalocaLista(nos);
-    bitmapLibera(bm);
-    bitmapLibera(bmRead);
-    free(vet);    
+    free(vet);
 
-    return 0;
+    return EXIT_SUCCESS;
 }

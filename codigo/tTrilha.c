@@ -151,10 +151,12 @@ void PreencheTabelaCodificacao(unsigned char** table, tTrilha* t, tAb* ab) {
     else {
         PushTrilha(t, ESQUERDA);
         PreencheTabelaCodificacao(table, t, GetSae(ab));
+        PopTrilha(t);
         PushTrilha(t, DIREITA);
         PreencheTabelaCodificacao(table, t, GetSad(ab));
+        PopTrilha(t);
     }
-    PopTrilha(t);
+    //PopTrilha(t);
 }
 
 static void ImprimePilha(tTrilha* pilha) {
