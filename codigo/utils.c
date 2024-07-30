@@ -58,17 +58,23 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo){
 	unsigned int qtdBytes = tam / 8;
 	unsigned int restoBits = tam % 8;
 	unsigned char c = 's';
-	if(tam == bitmapGetMaxSize(bm)) c = 'n';
 	
+    printf("tamanho do bitmap escrito: %d\n", tam);
+    
+    if(tam == bitmapGetMaxSize(bm)){
+        c = 'n';
+    }
 	fwrite(&c, sizeof(unsigned char), 1, arq);
 	
-	if(tam != bitmapGetMaxSize(bm)) fwrite(&tam, sizeof(unsigned int), 1, arq);
+	if(tam != bitmapGetMaxSize(bm)){
+        fwrite(&tam, sizeof(unsigned int), 1, arq);
+    }
 	
 	fwrite(bitmapGetContents(bm), sizeof(unsigned char), qtdBytes, arq);
 	if(restoBits){
 		unsigned char byte = (unsigned char)0;
 		
-		for(int b = 0; b < restoBits; b++){
+		for(unsigned int b = 0; b < restoBits; b++){
 			byte |= bitmapGetBit(bm, ((qtdBytes * 8) + b)) << (7 - b);
 		}
 		
@@ -80,30 +86,33 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo){
 	fclose(arq);
 }
 
-bitmap *BinReadBitmap(char *path) {
-    if (!path) {
-        TratarStructNula("BinRead", "bitmap ou path");
+bitmap *BinReadBitmap(FILE *arq) {
+    if (!arq) {
+        TratarStructNula("BinRead", "arquivo");
         return NULL;
     }
 
-    FILE *arq = fopen(path, "rb");
+    /*FILE *arq = fopen(path, "rb");
     if (!arq) {
         TratarFalhaAlocacao("arquivo do bitmap dump");
         return NULL;
-    }
+    }*/
 
     unsigned char c;
     unsigned int tam;
     size_t bytesRd = fread(&c, sizeof(unsigned char), 1, arq);
 
-	if(bytesRd != 1) return NULL;
-
+	if(bytesRd != 1){
+        printf("fim do arquivo onde o bitmap estava\n");
+        return NULL;
+    }
     if(c == 'n'){
         tam = UM_MEGA;
     }
     else{
         fread(&tam, sizeof(unsigned int), 1, arq);
     }
+    printf("tamanho do bitmap lido: %d\n", tam);
     unsigned int qtdBytes = tam / 8;
     unsigned int restoBits = tam % 8;
 
@@ -123,7 +132,7 @@ bitmap *BinReadBitmap(char *path) {
         return NULL;
     }
     printf("qtdBytes: %d\n", qtdBytes);
-    for(int i = 0; i < qtdBytes; i++) {
+    for(unsigned int i = 0; i < qtdBytes; i++) {
         printf("Teste\n");
         bitmapAppendByte(bm, contents[i]);
     }
@@ -137,7 +146,7 @@ bitmap *BinReadBitmap(char *path) {
         }
     }
 
-    fclose(arq);
+    //fclose(arq);
     free(contents);
     return bm;
 }

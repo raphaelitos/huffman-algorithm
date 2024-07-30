@@ -5,17 +5,42 @@
 #include "tTrilha.h"
 #include "utils.h"
 
-void Compacta(char *nomeArquivo, unsigned char **table){
-    
-    bitmap *bmComp = bitmapInit(UM_MEGA);
+void Compacta(char *nomeArquivo){
+    if(!nomeArquivo)TratarStructNula("compacta", "char*");
 
-    FILE *entrada = fopen(nomeArquivo, "rb");
-    if(!entrada)TratarFalhaAlocacao("arqIn compacta");
+    //Cabecalho do arquivo compactado
 
     char pathOut[strlen(nomeArquivo) + strlen(EXTENSAO) + 2];
     sprintf(pathOut, "%s%s", nomeArquivo, EXTENSAO);
 
+    int *vet = IniciaVetAscII();
+    ContaFreqCaracteres(vet, nomeArquivo);
+
+    tLista *nos = CriaListaNos(vet);
+    tAb *arvHuf = CriaArvoreHuf(nos);
+
+    tTrilha *pilha = CriaTrilha();
+    unsigned char **table = CriaTabelaCodificacao();
+    PreencheTabelaCodificacao(table, pilha, arvHuf);
+    
+    printf("Impressao da tabela de codificacao\n");
+    ImprimeTabela(table);
+
+    //colocando a arvore no binario
+    bitmap *bmComp = bitmapInit(UM_MEGA);
+    DumpArvoreBitmap(arvHuf, bmComp);
+    
+    printf("dump de bitmap com a arvore\n");
+    BinDumpBitmap(bmComp, pathOut);
+    ResetBitmap(bmComp);
+
+    //Conteudo do arquivo compactado
+
+    FILE *entrada = fopen(nomeArquivo, "rb");
+    if(!entrada)TratarFalhaAlocacao("arqIn compacta");
+
     unsigned char byte;
+
     while(1){
         size_t bytesRead = fread(&byte, sizeof(unsigned char), 1, entrada);
 
@@ -33,6 +58,7 @@ void Compacta(char *nomeArquivo, unsigned char **table){
                 bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
             }
 
+            printf("Dump com bitmap cheio (se tudo estiver certo)\n");
             BinDumpBitmap(bmComp, pathOut);
             ResetBitmap(bmComp);
         }
@@ -41,13 +67,19 @@ void Compacta(char *nomeArquivo, unsigned char **table){
             bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
         }
     }
-    
+    printf("Dump de bitmap compactado\n");
     BinDumpBitmap(bmComp, pathOut);
+    
     bitmapLibera(bmComp);
+    DesalocaTrilha(pilha);
+    DesalocaTabelaCodificacao(table);
+    DesalocaaAb(arvHuf);
+    DesalocaLista(nos);
+    free(vet);
     fclose(entrada);
 }
 
-static void DescompactaBitmap(bitmap* bm, int inic, char* pathOut, tAb* arvHuf) {
+static void DescompactaBitmap(bitmap* bm, unsigned int inic, char* pathOut, tAb* arvHuf) {
     tAb* aux = arvHuf;
     int bit = 0;
     bitmap* bmDescomp = bitmapInit(bitmapGetMaxSize(bm));    
@@ -57,11 +89,12 @@ static void DescompactaBitmap(bitmap* bm, int inic, char* pathOut, tAb* arvHuf) 
             BinDumpBitmap(bmDescomp, pathOut);
         }
         if(ehFolha(aux)) {
+            printf("Add byte descomp\n");
             bitmapAppendByte(bmDescomp, getChAb(aux));
             aux = arvHuf; //reset da árvore para o próximo caractere
         }
 
-        bit = bitmapGetBit(bm, inic);
+        bit = (int)bitmapGetBit(bm, inic);
         inic++;
         if(bit == 0) aux = GetSae(aux);
         else aux = GetSad(aux);
@@ -71,19 +104,30 @@ static void DescompactaBitmap(bitmap* bm, int inic, char* pathOut, tAb* arvHuf) 
     if (bitmapGetLength(bmDescomp) > 0) {
         BinDumpBitmap(bmDescomp, pathOut);
     }
+    bitmapLibera(bmDescomp);
 }
 
 void Descompacta(char* nomeArquivoIn) {
+    if(!nomeArquivoIn)TratarStructNula("Descompacta", "char*");
+    
     char pathOut[strlen(nomeArquivoIn) - strlen(EXTENSAO) + 1];
     sscanf(nomeArquivoIn, "%s.comp", pathOut);
 
-    int index = 0;
-    bitmap* bm = BinReadBitmap(nomeArquivoIn);
+
+    FILE *arqIn = fopen(nomeArquivoIn, "rb");
+    if(!arqIn) TratarFalhaAlocacao("arqIn em descompacta");
+
+    printf("lendo a arvore no cabecalho do arquivo\n");
+    bitmap* bm = BinReadBitmap(arqIn);
+
+    unsigned int index = 0;
     tAb* arvHuf = ReadArvoreBitmap(bm, &index);
     bitmapLibera(bm);
 
     while(1){
-        bm = BinReadBitmap(nomeArquivoIn);
+        printf("lendo bitmap de conteudo do arquivo\n");
+        bm = BinReadBitmap(arqIn);
+        
         if(bm == NULL) break;
 
         DescompactaBitmap(bm, index, pathOut, arvHuf);
@@ -91,6 +135,8 @@ void Descompacta(char* nomeArquivoIn) {
         bitmapLibera(bm);
         index = 0;
     }
+    
+    fclose(arqIn);
 }
 
 void TestaArquivos(FILE *a1, FILE *a2){
@@ -119,51 +165,24 @@ int main(int argc, char *argv[]) {
     }
 
     char *inputPath = argv[1];
-    char compactedFile[strlen(inputPath) + strlen(EXTENSAO) + 1];
-    sprintf(compactedFile, "%s%s", inputPath, EXTENSAO);
-    char outputPath[] = "output.txt";
-
-    // Inicializa as estruturas necessárias
-    int *vet = IniciaVetAscII();
-    ContaFreqCaracteres(vet, inputPath);
-
-    tLista *nos = CriaListaNos(vet);
-    tAb *arvHuf = CriaArvoreHuf(nos);
-
-    tTrilha *pilha = CriaTrilha();
-    unsigned char **table = CriaTabelaCodificacao();
-    PreencheTabelaCodificacao(table, pilha, arvHuf);
-
-    //colocando a arvore no binario
-    bitmap* bm = bitmapInit(UM_MEGA);
-    DumpArvoreBitmap(arvHuf, bm);
-    BinDumpBitmap(bm, compactedFile);
-    bitmapLibera(bm);
-
-    ImprimeTabela(table);
-    printf("Comecou a compactar\n");
-    // Compacta o arquivo de entrada
-    Compacta(inputPath, table);
-
-    printf("Comecou a descompactar\n");
-    // Descompacta o arquivo compactado
-    Descompacta(compactedFile);
-
-    // Verifica se o arquivo descompactado é igual ao arquivo original
-    FILE *original = fopen(inputPath, "rb");
-    FILE *descompacted = fopen(outputPath, "rb");
+    char compactedPath[strlen(inputPath) + strlen(EXTENSAO) + 1];
+    sprintf(compactedPath, "%s%s", inputPath, EXTENSAO);
+    char outputPath[] = "output.txt";    
     
+    printf("\nComecou a compactar\n");
+    Compacta(inputPath);
+    /*
+    printf("\nComecou a descompactar\n");
+    Descompacta(compactedPath);
+
+    FILE *original = fopen(inputPath, "rb");
+    FILE *descompacted = fopen(compactedPath, "rb");
+    
+    // Verifica se o arquivo descompactado é igual ao arquivo original
     TestaArquivos(original, descompacted);
 
     fclose(original);
     fclose(descompacted);
-
-    // Desaloca as estruturas
-    DesalocaTrilha(pilha);
-    DesalocaTabelaCodificacao(table);
-    DesalocaaAb(arvHuf);
-    DesalocaLista(nos);
-    free(vet);
-
+    */
     return EXIT_SUCCESS;
 }

@@ -139,10 +139,10 @@ void DumpArvoreBitmap(tAb *ab, bitmap *bm){
     DumpArvoreBitmap(ab->sad, bm);
 }
 
-tAb *ReadArvoreBitmap(bitmap *bm, int *index) {
+tAb *ReadArvoreBitmap(bitmap *bm, unsigned int *index) {
     if (!bm) TratarStructNula("ReadArvoreBitmap", "bitmap");
 
-    if(*index >= bitmapGetLength(bm)) return NULL;
+    if((*index) >= bitmapGetLength(bm)) return NULL;
 
     if (bitmapGetBit(bm, *index) == 1) {
         (*index)++;

@@ -46,9 +46,9 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo);
 
 /// @brief cria um bitmap a partir de um
 /// arquivo binario
-/// @param path o camiho para o arquivo
+/// @param arq o arquivo que sera lido
 /// @return o bitmao criado
 /// @pre o caminho levar a um arquivo binario valido
-bitmap *BinReadBitmap(char *path);
+bitmap *BinReadBitmap(FILE *arq);
 
 #endif

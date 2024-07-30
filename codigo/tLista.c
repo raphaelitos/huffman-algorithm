@@ -87,33 +87,6 @@ void InsereLista(tLista *l, tAb *ab){
             l->ult->prox = nova;
             l->ult = nova;
         }
-
-        //outro jeito de fazer isso
-        /*
-         while(aux){
-            if(getFreqAb(nova->ab) <= getFreqAb(aux->ab)){
-                
-                nova->ant = aux->ant;
-                nova->prox = aux;
-                
-                if(aux->ant){
-                    aux->ant->prox = nova;
-                }
-                else{//primeira posicao
-                    l->prim = nova;
-                }
-                
-                aux->ant = nova;
-
-                return;
-            }
-            aux = aux->prox;
-        }
-        //ultima posicao
-        nova->ant = l->ult;
-        l->ult->prox = nova;
-        l->ult = nova;
-        nova->prox = NULL;*/
     }
     (l->tam)++;
 }
