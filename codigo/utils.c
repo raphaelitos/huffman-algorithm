@@ -165,8 +165,7 @@ bitmap *BinReadBitmap(char *path) {
 	fread(&c, sizeof(unsigned char), 1, arq);
     unsigned int tam;
 
-	if(c != 'n') tam = 1024;
-
+	if(c == 'n') tam = 1024;
     else fread(&tam, sizeof(unsigned int), 1, arq);
 
     unsigned int qtdBytes = tam / 8;
