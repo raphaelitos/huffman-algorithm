@@ -35,14 +35,12 @@ void PrintVetInt(int *vet, int tam);
 
 /// @brief salva bm num arquivo binario  
 /// @param bm um bitmap valido
-/// @param path o caminho para o diretorio de bm
 /// @param nomeArquivo o nome do arquivo onde bm 
 /// sera salvo
 /// @pre o caminho ser valido e o bitmap estar
 /// devidamente alocado na memoria
 /// @post um arquivo .bin nomeado por nomeArquivo
-/// no diretorio path
-void BinDumpBitmap(bitmap *bm, char* path, char *nomeArquivo);
+void BinDumpBitmap(bitmap *bm, char *nomeArquivo);
 
 /// @brief cria um bitmap a partir de um
 /// arquivo binario

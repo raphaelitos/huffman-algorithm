@@ -79,12 +79,12 @@ void BinDumpBitmap(bitmap *bm, char *path, char *nomeArquivo){
 }
 */
 
-void BinDumpBitmap(bitmap *bm, char *path, char *nomeArquivo){
-	if(!bm || !path || !nomeArquivo) TratarStructNula("BinDump", "bitmap ou path");
-	char dest[strlen(path) + strlen(nomeArquivo) + 6];
-	sprintf(dest, "%s/%s.bin", path, nomeArquivo);// esse .bin aqui ta suspeito
+void BinDumpBitmap(bitmap *bm, char *nomeArquivo){
+	if(!bm || !nomeArquivo) TratarStructNula("BinDump", "bitmap ou path");
+	char dest[strlen(nomeArquivo) + 6];
+	//sprintf(dest, "./%s.bin", nomeArquivo);// esse .bin aqui ta suspeito
 
-	FILE *arq = fopen(dest, "ab");
+	FILE *arq = fopen(nomeArquivo, "ab");
 	if(!arq)TratarFalhaAlocacao("arquivo do bitmap dump");
 	
 	unsigned int tam = bitmapGetLength(bm);
@@ -100,9 +100,11 @@ void BinDumpBitmap(bitmap *bm, char *path, char *nomeArquivo){
 	fwrite(bitmapGetContents(bm), sizeof(unsigned char), qtdBytes, arq);
 	if(restoBits){
 		unsigned char byte = (unsigned char)0;
+		
 		for(int b = 0; b < restoBits; b++){
 			byte |= bitmapGetBit(bm, ((qtdBytes * 8) + b)) << (7 - b);
 		}
+		
 		//byte preenchido com os n bits do ultimo byte
 		//do bitmap, caso esse byte nao esteja cheio
 		fwrite(&byte, sizeof(unsigned char), 1, arq);
@@ -149,7 +151,7 @@ bitmap *BinReadBitmap(char *path){
 }
 */
 
-bitmap *BinReadBitmap(char *path) {
+/*bitmap *BinReadBitmap(char *path) {
     if (!path) {
         TratarStructNula("BinRead", "bitmap ou path");
         return NULL;
@@ -162,8 +164,8 @@ bitmap *BinReadBitmap(char *path) {
     }
 
 	unsigned char c;
-	fread(&c, sizeof(unsigned char), 1, arq);
     unsigned int tam;
+	fread(&c, sizeof(unsigned char), 1, arq);
 
 	if(c == 'n') tam = 1024;
     else fread(&tam, sizeof(unsigned int), 1, arq);
@@ -185,7 +187,7 @@ bitmap *BinReadBitmap(char *path) {
     bitmap *bm = bitmapInit(tam);
     if(!bm) {
         free(contents);
-        TratarFalhaAlocacao("inicialização do bitmap");
+        TratarFalhaAlocacao("bitmap em readBin");
         return NULL;
     }
 
@@ -194,7 +196,62 @@ bitmap *BinReadBitmap(char *path) {
     }
 
 	if(restoBits) {
-        unsigned char byte = contents[qtdBytes + resto];
+        unsigned char byte = contents[qtdBytes + resto]; <- erro aqui
+        for(unsigned int b = 0; b < restoBits; b++) {
+            unsigned char bit = (byte >> (7 - b)) & 0x01;
+            bitmapAppendLeastSignificantBit(bm, bit);
+        }
+    }
+
+    fclose(arq);
+    free(contents);
+    return bm;
+}*/
+
+bitmap *BinReadBitmap(char *path) {
+    if (!path) {
+        TratarStructNula("BinRead", "bitmap ou path");
+        return NULL;
+    }
+
+    FILE *arq = fopen(path, "rb");
+    if (!arq) {
+        TratarFalhaAlocacao("arquivo do bitmap dump");
+        return NULL;
+    }
+
+    unsigned char c;
+    unsigned int tam;
+    fread(&c, sizeof(unsigned char), 1, arq);
+
+    if(c == 'n') tam = 1024;
+    else fread(&tam, sizeof(unsigned int), 1, arq);
+
+    unsigned int qtdBytes = tam / 8;
+    unsigned int restoBits = tam % 8;
+
+    unsigned char *contents = (unsigned char *)malloc(qtdBytes + (restoBits ? 1 : 0));
+    if(!contents) {
+        fclose(arq);
+        TratarFalhaAlocacao("alocação da memória para o bitmap");
+        return NULL;
+    }
+
+    fread(contents, sizeof(unsigned char), qtdBytes + (restoBits ? 1 : 0), arq);
+
+    bitmap *bm = bitmapInit(tam);
+    if(!bm) {
+        free(contents);
+        TratarFalhaAlocacao("bitmap em readBin");
+        return NULL;
+    }
+
+    for(int i = 0; i < qtdBytes; i++) {
+        bitmapAppendByte(bm, contents[i]);
+    }
+
+    if(restoBits) {
+        unsigned char byte = contents[qtdBytes];
         for(unsigned int b = 0; b < restoBits; b++) {
             unsigned char bit = (byte >> (7 - b)) & 0x01;
             bitmapAppendLeastSignificantBit(bm, bit);
