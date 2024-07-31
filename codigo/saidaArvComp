@@ -1,0 +1,68 @@
+
+Comecou a compactar
+Impressao da tabela de codificacao
+Tabela[ ]: 110
+Tabela[b]: 01
+Tabela[e]: 101
+Tabela[m]: 00
+Tabela[o]: 111
+Tabela[s]: 100
+dump de bitmap com a arvore
+tamanho do bitmap escrito: 59
+char lido: b
+valor do bit add ao bitmap: 0
+valor do bit add ao bitmap: 1
+char lido: o
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 1
+char lido: m
+valor do bit add ao bitmap: 0
+valor do bit add ao bitmap: 0
+char lido:  
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 0
+char lido: e
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 0
+valor do bit add ao bitmap: 1
+char lido: s
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 0
+valor do bit add ao bitmap: 0
+char lido: s
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 0
+valor do bit add ao bitmap: 0
+char lido: e
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 0
+valor do bit add ao bitmap: 1
+char lido:  
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 0
+char lido: b
+valor do bit add ao bitmap: 0
+valor do bit add ao bitmap: 1
+char lido: o
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 1
+char lido: m
+valor do bit add ao bitmap: 0
+valor do bit add ao bitmap: 0
+char lido: b
+valor do bit add ao bitmap: 0
+valor do bit add ao bitmap: 1
+char lido: o
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 1
+valor do bit add ao bitmap: 1
+char lido: m
+valor do bit add ao bitmap: 0
+valor do bit add ao bitmap: 0
+Dump de bitmap compactado
+tamanho do bitmap escrito: 39
+m b 1 s e 1   o 0 0 -1 

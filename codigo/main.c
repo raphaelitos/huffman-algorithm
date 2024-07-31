@@ -3,8 +3,7 @@
 #include "tTrilha.h"
 #include "utils.h"
 
-/*
-int main(){
+/*int main(){
     
     int *vet = IniciaVetAscII();
     ContaFreqCaracteres(vet, "teste.txt");

@@ -11,7 +11,7 @@ Teste
 Teste
 Teste
 entrando no byte quebrado
-lendo bitmap de conteudo do arquivo
+m b 1 s e 1   o 0 0 -1 lendo bitmap de conteudo do arquivo
 tamanho do bitmap lido: 39
 qtdBytes: 4
 Teste
@@ -21,32 +21,40 @@ Teste
 entrando no byte quebrado
 bitmap lido
 Add byte descomp
-char encontrado: b
+char encontrado: s
 Add byte descomp
-char encontrado: o
-Add byte descomp
-char encontrado: e
-Add byte descomp
-char encontrado: e
-Add byte descomp
-char encontrado: o
-Add byte descomp
-char encontrado: e
+char encontrado: m
 Add byte descomp
 char encontrado: b
 Add byte descomp
-char encontrado: e
+char encontrado: m
 Add byte descomp
-char encontrado: o
+char encontrado: s
 Add byte descomp
-char encontrado: o
+char encontrado: m
 Add byte descomp
-char encontrado: o
+char encontrado: b
 Add byte descomp
-char encontrado: e
+char encontrado: b
 Add byte descomp
-char encontrado: o
+char encontrado: m
+Add byte descomp
+char encontrado: s
+Add byte descomp
+char encontrado: m
+Add byte descomp
+char encontrado: m
+Add byte descomp
+char encontrado: m
+Add byte descomp
+char encontrado: m
+Add byte descomp
+char encontrado: b
+Add byte descomp
+char encontrado: m
+Add byte descomp
+char encontrado: m
 dump do ultimo bitmap descomp
-tamanho do bitmap escrito: 104
+tamanho do bitmap escrito: 136
 lendo bitmap de conteudo do arquivo
 fim do arquivo onde o bitmap estava

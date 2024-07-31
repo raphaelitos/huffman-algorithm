@@ -30,7 +30,7 @@ void ContaFreqCaracteres(int *vet, char *path){
     
     unsigned char byte;
     while (fread(&byte, sizeof(unsigned char), 1, arq) == 1) {
-        vet[byte]++;
+        vet[(int)byte]++;
     }
 
     fclose(arq);

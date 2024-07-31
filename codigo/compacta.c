@@ -35,7 +35,6 @@ void Compacta(char *nomeArquivo){
     ResetBitmap(bmComp);
 
     //Conteudo do arquivo compactado
-
     FILE *entrada = fopen(nomeArquivo, "rb");
     if(!entrada)TratarFalhaAlocacao("arqIn compacta");
 
@@ -51,11 +50,13 @@ void Compacta(char *nomeArquivo){
         int tamBm = bitmapGetLength(bmComp);
         int max = bitmapGetMaxSize(bmComp);
         int i = 0;
+        printf("char lido: %c\n", byte);
 
         if((tamBm + tamStr) >= max){
             
             for(i = 0; i < (max - tamBm); i++){
                 bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
+                printf("valor do bit add ao bitmap: %d\n", (code[i] - '0'));
             }
 
             printf("Dump com bitmap cheio (se tudo estiver certo)\n");
@@ -65,11 +66,14 @@ void Compacta(char *nomeArquivo){
 
         for(i; i < tamStr; i++){
             bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
+            printf("valor do bit add ao bitmap: %d\n", (code[i] - '0'));
         }
     }
     printf("Dump de bitmap compactado\n");
     BinDumpBitmap(bmComp, pathOut);
     
+    ImprimeArvore(arvHuf, -1);
+
     bitmapLibera(bmComp);
     DesalocaTrilha(pilha);
     DesalocaTabelaCodificacao(table);
@@ -104,7 +108,7 @@ static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
         else aux = GetSad(aux);
     }
 
-    //Salva o ultimo bitmap descompactado se ele nao tiver ficado cheio
+    //Salva o ultimo bitmap descompactado se ele nao tiver enchido
     if (bitmapGetLength(bmDescomp) > 0) {
         printf("dump do ultimo bitmap descomp\n");
         BinDumpBitmap(bmDescomp, pathOut);
@@ -137,6 +141,7 @@ void Descompacta(char* nomeArquivoIn) {
 
     unsigned int index = 0;
     tAb* arvHuf = ReadArvoreBitmap(bm, &index);
+    ImprimeArvore(arvHuf, -1);
     bitmapLibera(bm);
 
     while(1){
@@ -184,6 +189,7 @@ int main(int argc, char *argv[]) {
     char compactedPath[strlen(inputPath) + strlen(EXTENSAO) + 1];
     sprintf(compactedPath, "%s%s", inputPath, EXTENSAO);
     char outputPath[] = "teste.txt.out";    
+   
     /*
     printf("\nComecou a compactar\n");
     Compacta(inputPath);
