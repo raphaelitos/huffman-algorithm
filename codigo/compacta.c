@@ -79,14 +79,16 @@ void Compacta(char *nomeArquivo){
     fclose(entrada);
 }
 
-static void DescompactaBitmap(bitmap* bm, unsigned int inic, char* pathOut, tAb* arvHuf) {
+static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
     tAb* aux = arvHuf;
     int bit = 0;
-    bitmap* bmDescomp = bitmapInit(bitmapGetMaxSize(bm));    
+    unsigned int index = 0;
+    bitmap* bmDescomp = bitmapInit(UM_MEGA);
 
-    while(inic < bitmapGetLength(bm)) {
+    while(index < bitmapGetLength(bm)) {
         if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
             BinDumpBitmap(bmDescomp, pathOut);
+            ResetBitmap(bmDescomp);
         }
         if(ehFolha(aux)) {
             printf("Add byte descomp\n");
@@ -94,8 +96,8 @@ static void DescompactaBitmap(bitmap* bm, unsigned int inic, char* pathOut, tAb*
             aux = arvHuf; //reset da árvore para o próximo caractere
         }
 
-        bit = (int)bitmapGetBit(bm, inic);
-        inic++;
+        bit = (int)bitmapGetBit(bm, index);
+        index++;
         if(bit == 0) aux = GetSae(aux);
         else aux = GetSad(aux);
     }
@@ -110,9 +112,12 @@ static void DescompactaBitmap(bitmap* bm, unsigned int inic, char* pathOut, tAb*
 void Descompacta(char* nomeArquivoIn) {
     if(!nomeArquivoIn)TratarStructNula("Descompacta", "char*");
     
-    char pathOut[strlen(nomeArquivoIn) - strlen(EXTENSAO) + 1];
-    sscanf(nomeArquivoIn, "%s.comp", pathOut);
-
+    char pathOut[strlen(nomeArquivoIn) - strlen(EXTENSAO) + 5];
+    size_t len = strlen(nomeArquivoIn) - strlen(EXTENSAO);
+    strncpy(pathOut, nomeArquivoIn, len);  // Copia a parte do nome sem a extensão
+    pathOut[len] = '\0';  // Adiciona o caractere nulo no final
+    strcat(pathOut, ".out");
+    printf("%s\n", pathOut);
 
     FILE *arqIn = fopen(nomeArquivoIn, "rb");
     if(!arqIn) TratarFalhaAlocacao("arqIn em descompacta");
@@ -129,11 +134,11 @@ void Descompacta(char* nomeArquivoIn) {
         bm = BinReadBitmap(arqIn);
         
         if(bm == NULL) break;
+        printf("bitmap lido\n");
 
-        DescompactaBitmap(bm, index, pathOut, arvHuf);
+        DescompactaBitmap(bm, pathOut, arvHuf);
 
         bitmapLibera(bm);
-        index = 0;
     }
     
     DesalocaaAb(arvHuf);
@@ -153,9 +158,9 @@ void TestaArquivos(FILE *a1, FILE *a2){
         }
     }
     if (result && feof(a1) && feof(a2)) {
-        printf("Teste bem-sucedido: O arquivo descompactado é igual ao original.\n");
+        printf("Teste bem-sucedido: O arquivo descompactado eh igual ao original.\n");
     } else {
-        printf("Teste falhou: O arquivo descompactado é diferente do original.\n");
+        printf("Teste falhou: O arquivo descompactado eh diferente do original.\n");
     }
 }
 
@@ -168,10 +173,10 @@ int main(int argc, char *argv[]) {
     char *inputPath = argv[1];
     char compactedPath[strlen(inputPath) + strlen(EXTENSAO) + 1];
     sprintf(compactedPath, "%s%s", inputPath, EXTENSAO);
-    char outputPath[] = "output.txt";    
+    char outputPath[] = "teste.txt.out";    
     
-    printf("\nComecou a compactar\n");
-    Compacta(inputPath);
+    //printf("\nComecou a compactar\n");
+    //Compacta(inputPath);
     
     printf("\nComecou a descompactar\n");
     Descompacta(compactedPath);
