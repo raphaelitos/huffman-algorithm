@@ -87,12 +87,14 @@ static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
 
     while(index < bitmapGetLength(bm)) {
         if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
+            printf("dump de bitmap descompactado\n");
             BinDumpBitmap(bmDescomp, pathOut);
             ResetBitmap(bmDescomp);
         }
         if(ehFolha(aux)) {
             printf("Add byte descomp\n");
             bitmapAppendByte(bmDescomp, getChAb(aux));
+            printf("char encontrado: %c\n", getChAb(aux));
             aux = arvHuf; //reset da árvore para o próximo caractere
         }
 
@@ -102,22 +104,30 @@ static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
         else aux = GetSad(aux);
     }
 
-    //Salva o ultimo bitmap descompactado que ficou incompleto
+    //Salva o ultimo bitmap descompactado se ele nao tiver ficado cheio
     if (bitmapGetLength(bmDescomp) > 0) {
+        printf("dump do ultimo bitmap descomp\n");
         BinDumpBitmap(bmDescomp, pathOut);
     }
+    
     bitmapLibera(bmDescomp);
 }
 
 void Descompacta(char* nomeArquivoIn) {
     if(!nomeArquivoIn)TratarStructNula("Descompacta", "char*");
-    
-    char pathOut[strlen(nomeArquivoIn) - strlen(EXTENSAO) + 5];
-    size_t len = strlen(nomeArquivoIn) - strlen(EXTENSAO);
-    strncpy(pathOut, nomeArquivoIn, len);  // Copia a parte do nome sem a extensão
-    pathOut[len] = '\0';  // Adiciona o caractere nulo no final
-    strcat(pathOut, ".out");
-    printf("%s\n", pathOut);
+
+    size_t tamIn = strlen(nomeArquivoIn);
+    size_t tamExt = strlen(EXTENSAO);
+
+    if (tamIn <= tamExt || strcmp((nomeArquivoIn + tamIn - tamExt), EXTENSAO)) {
+        printf("ERRO: O arquivo deve ter a extensao .comp\n");
+        return;
+    }
+
+    size_t tamCpy = tamIn - tamExt;
+    char pathOut[tamCpy + 1];
+    strncpy(pathOut, nomeArquivoIn, tamCpy);
+    pathOut[tamCpy] = '\0';
 
     FILE *arqIn = fopen(nomeArquivoIn, "rb");
     if(!arqIn) TratarFalhaAlocacao("arqIn em descompacta");
@@ -174,13 +184,13 @@ int main(int argc, char *argv[]) {
     char compactedPath[strlen(inputPath) + strlen(EXTENSAO) + 1];
     sprintf(compactedPath, "%s%s", inputPath, EXTENSAO);
     char outputPath[] = "teste.txt.out";    
-    
-    //printf("\nComecou a compactar\n");
-    //Compacta(inputPath);
-    
+    /*
+    printf("\nComecou a compactar\n");
+    Compacta(inputPath);
+    */
     printf("\nComecou a descompactar\n");
-    Descompacta(compactedPath);
-
+    Descompacta(inputPath);
+    /*
     FILE *original = fopen(inputPath, "rb");
     FILE *descompacted = fopen(outputPath, "rb");
     
@@ -189,6 +199,6 @@ int main(int argc, char *argv[]) {
 
     fclose(original);
     fclose(descompacted);
-    
+    */
     return EXIT_SUCCESS;
 }

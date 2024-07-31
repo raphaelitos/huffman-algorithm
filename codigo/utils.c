@@ -92,12 +92,6 @@ bitmap *BinReadBitmap(FILE *arq) {
         return NULL;
     }
 
-    /*FILE *arq = fopen(path, "rb");
-    if (!arq) {
-        TratarFalhaAlocacao("arquivo do bitmap dump");
-        return NULL;
-    }*/
-
     unsigned char c;
     unsigned int tam;
     size_t bytesRd = fread(&c, sizeof(unsigned char), 1, arq);
@@ -112,14 +106,15 @@ bitmap *BinReadBitmap(FILE *arq) {
     else{
         fread(&tam, sizeof(unsigned int), 1, arq);
     }
+    
     printf("tamanho do bitmap lido: %d\n", tam);
     unsigned int qtdBytes = tam / 8;
     unsigned int restoBits = tam % 8;
 
-    unsigned char *contents = (unsigned char *)malloc(qtdBytes + (restoBits ? 1 : 0));
+    unsigned char *contents = (unsigned char *)calloc((qtdBytes + (restoBits ? 1 : 0)), sizeof(unsigned char));
     if(!contents) {
         fclose(arq);
-        TratarFalhaAlocacao("alocação da memória para o bitmap");
+        TratarFalhaAlocacao("contents para bitmap");
         return NULL;
     }
 
@@ -146,7 +141,6 @@ bitmap *BinReadBitmap(FILE *arq) {
         }
     }
 
-    //fclose(arq);
     free(contents);
     return bm;
 }

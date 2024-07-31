@@ -1,0 +1,52 @@
+
+Comecou a descompactar
+lendo a arvore no cabecalho do arquivo
+tamanho do bitmap lido: 59
+qtdBytes: 7
+Teste
+Teste
+Teste
+Teste
+Teste
+Teste
+Teste
+entrando no byte quebrado
+lendo bitmap de conteudo do arquivo
+tamanho do bitmap lido: 39
+qtdBytes: 4
+Teste
+Teste
+Teste
+Teste
+entrando no byte quebrado
+bitmap lido
+Add byte descomp
+char encontrado: b
+Add byte descomp
+char encontrado: o
+Add byte descomp
+char encontrado: e
+Add byte descomp
+char encontrado: e
+Add byte descomp
+char encontrado: o
+Add byte descomp
+char encontrado: e
+Add byte descomp
+char encontrado: b
+Add byte descomp
+char encontrado: e
+Add byte descomp
+char encontrado: o
+Add byte descomp
+char encontrado: o
+Add byte descomp
+char encontrado: o
+Add byte descomp
+char encontrado: e
+Add byte descomp
+char encontrado: o
+dump do ultimo bitmap descomp
+tamanho do bitmap escrito: 104
+lendo bitmap de conteudo do arquivo
+fim do arquivo onde o bitmap estava
