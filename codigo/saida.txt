@@ -1,0 +1,37 @@
+
+Comecou a compactar
+Impressao da tabela de codificacao
+Tabela[ ]: 110
+Tabela[b]: 01
+Tabela[e]: 101
+Tabela[m]: 00
+Tabela[o]: 111
+Tabela[s]: 100
+dump de bitmap com a arvore
+tamanho do bitmap escrito: 59
+Dump de bitmap compactado
+tamanho do bitmap escrito: 39
+
+Comecou a descompactar
+lendo a arvore no cabecalho do arquivo
+tamanho do bitmap lido: 59
+qtdBytes: 7
+Teste
+Teste
+Teste
+Teste
+Teste
+Teste
+Teste
+entrando no byte quebrado
+lendo bitmap de conteudo do arquivo
+tamanho do bitmap lido: 39
+qtdBytes: 4
+Teste
+Teste
+Teste
+Teste
+entrando no byte quebrado
+lendo bitmap de conteudo do arquivo
+fim do arquivo onde o bitmap estava
+Teste falhou: O arquivo descompactado é diferente do original.

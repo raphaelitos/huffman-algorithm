@@ -136,6 +136,7 @@ void Descompacta(char* nomeArquivoIn) {
         index = 0;
     }
     
+    DesalocaaAb(arvHuf);
     fclose(arqIn);
 }
 
@@ -171,18 +172,18 @@ int main(int argc, char *argv[]) {
     
     printf("\nComecou a compactar\n");
     Compacta(inputPath);
-    /*
+    
     printf("\nComecou a descompactar\n");
     Descompacta(compactedPath);
 
     FILE *original = fopen(inputPath, "rb");
-    FILE *descompacted = fopen(compactedPath, "rb");
+    FILE *descompacted = fopen(outputPath, "rb");
     
     // Verifica se o arquivo descompactado é igual ao arquivo original
     TestaArquivos(original, descompacted);
 
     fclose(original);
     fclose(descompacted);
-    */
+    
     return EXIT_SUCCESS;
 }

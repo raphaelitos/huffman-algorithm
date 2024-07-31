@@ -20,7 +20,7 @@ static tCelDado *criaCelDado(unsigned char info){
 }
 
 static void desalocaCelDado(tCelDado *c){
-    free(c);
+    if(c) free(c);
 }
 
 struct Trilha{
@@ -38,7 +38,7 @@ tTrilha *CriaTrilha(){
     tTrilha *nova = (tTrilha*)calloc(1, sizeof(tTrilha));
     if(!nova) TratarFalhaAlocacao("Trilha");
 
-    nova->prim = NULL;
+    nova->prim = nova->ult = NULL;
     return nova;
 }
 
@@ -49,19 +49,9 @@ void DesalocaTrilha(tTrilha *p){
         pop = aux;
         aux = aux->prox;
         desalocaCelDado(pop);
+        pop = NULL;
     }
     free(p);
-}
-
-tTrilha *ClonaTrilha(tTrilha *p){
-    if(!p)TratarStructNula("clona", "Trilha");
-    tTrilha *clone = CriaTrilha();
-    
-    for(tCelDado *c = p->prim; c != NULL; c = c->prox){
-        PushTrilha(clone, c->info);
-    }
-    
-    return clone;
 }
 
 void PushTrilha(tTrilha *p, unsigned char bit){
@@ -70,7 +60,7 @@ void PushTrilha(tTrilha *p, unsigned char bit){
     tCelDado *nova = criaCelDado(bit);
 
     if(EstaVaziaTrilha(p)){
-        p->prim = p->ult =nova;
+        p->prim = p->ult = nova;
     }
     else{
         p->ult->prox = nova;
@@ -91,8 +81,12 @@ unsigned char PopTrilha(tTrilha *p){
     if(p->ult){
         p->ult->prox = NULL;
     }
+    else{
+        p->prim = NULL;
+    }
     (p->tam)--;
     desalocaCelDado(pop);
+    pop = NULL;
     return c;
 }
 
@@ -117,6 +111,7 @@ void DesalocaTabelaCodificacao(unsigned char **table){
 
     for(int i = 0; i < TAM_ASCII; i++){
         free(table[i]);
+        table[i] = NULL;
     }
     free(table);
 }
@@ -152,6 +147,7 @@ void PreencheTabelaCodificacao(unsigned char** table, tTrilha* t, tAb* ab) {
         PushTrilha(t, ESQUERDA);
         PreencheTabelaCodificacao(table, t, GetSae(ab));
         PopTrilha(t);
+        
         PushTrilha(t, DIREITA);
         PreencheTabelaCodificacao(table, t, GetSad(ab));
         PopTrilha(t);
@@ -170,7 +166,6 @@ void ImprimeTabela(unsigned char** table) {
     for (int i = 0; i < TAM_ASCII; i++) {
         if (table[i] != NULL) {
             printf("Tabela[%c]: ", (char)i);
-            //ImprimePilha(table[i]);
             printf("%s\n", table[i]);
         }
     }

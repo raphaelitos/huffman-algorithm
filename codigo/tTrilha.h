@@ -9,8 +9,6 @@ tTrilha *CriaTrilha();
 
 void DesalocaTrilha(tTrilha *p);
 
-tTrilha *ClonaTrilha(tTrilha *p);
-
 void PushTrilha(tTrilha *p, unsigned char c);
 
 unsigned char PopTrilha(tTrilha *p);
