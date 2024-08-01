@@ -47,7 +47,7 @@ void PrintVetInt(int *vet, int tam){
     printf("]\n");
 }
 
-void BinDumpBitmap(bitmap *bm, char *nomeArquivo){
+void BinDumpBitmap(bitmap *bm, char *nomeArquivo, int writeTam){
 	if(!bm || !nomeArquivo) TratarStructNula("BinDump", "bitmap ou path");
 	char dest[strlen(nomeArquivo) + 6];
 
@@ -57,17 +57,19 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo){
 	unsigned int tam = bitmapGetLength(bm);
 	unsigned int qtdBytes = tam / 8;
 	unsigned int restoBits = tam % 8;
-	unsigned char c = 's';
 	
     printf("tamanho do bitmap escrito: %d\n", tam);
     
-    if(tam == bitmapGetMaxSize(bm)){
-        c = 'n';
-    }
-	fwrite(&c, sizeof(unsigned char), 1, arq);
-	
-	if(tam != bitmapGetMaxSize(bm)){
-        fwrite(&tam, sizeof(unsigned int), 1, arq);
+    if(writeTam) {
+	    unsigned char c = 's';
+        if(tam == bitmapGetMaxSize(bm)){
+            c = 'n';
+        }
+        fwrite(&c, sizeof(unsigned char), 1, arq);
+        
+        if(tam != bitmapGetMaxSize(bm)){
+            fwrite(&tam, sizeof(unsigned int), 1, arq);
+        }
     }
 	
     for(int i = 0; i < qtdBytes; i++) printf("%u ", bitmapGetContents(bm)[i]);

@@ -31,7 +31,7 @@ void Compacta(char *nomeArquivo){
     DumpArvoreBitmap(arvHuf, bmComp);
     
     printf("dump de bitmap com a arvore\n");
-    BinDumpBitmap(bmComp, pathOut);
+    BinDumpBitmap(bmComp, pathOut, 1);
     bitmapLibera(bmComp);
 
     //Conteudo do arquivo compactado
@@ -62,7 +62,7 @@ void Compacta(char *nomeArquivo){
             }
 
             printf("Dump com bitmap cheio (se tudo estiver certo)\n");
-            BinDumpBitmap(bmComp, pathOut);
+            BinDumpBitmap(bmComp, pathOut, 1);
             bitmapLibera(bmComp);
             bmComp = bitmapInit(UM_MEGA);
             //ResetBitmap(bmComp);
@@ -74,7 +74,7 @@ void Compacta(char *nomeArquivo){
         }
     }
     printf("Dump de bitmap compactado\n");
-    BinDumpBitmap(bmComp, pathOut);
+    BinDumpBitmap(bmComp, pathOut, 1);
     
     ImprimeArvore(arvHuf, -1);
 
@@ -103,7 +103,7 @@ static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
 
         if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
             printf("dump de bitmap descompactado\n");
-            BinDumpBitmap(bmDescomp, pathOut);
+            BinDumpBitmap(bmDescomp, pathOut, 0);
             bitmapLibera(bmDescomp);
             bmDescomp = bitmapInit(UM_MEGA);
             //ResetBitmap(bmDescomp);
@@ -119,7 +119,7 @@ static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
     //Salva o ultimo bitmap descompactado se ele nao tiver enchido
     if (bitmapGetLength(bmDescomp) > 0) {
         printf("dump do ultimo bitmap descomp\n");
-        BinDumpBitmap(bmDescomp, pathOut);
+        BinDumpBitmap(bmDescomp, pathOut, 0);
     }
     
     bitmapLibera(bmDescomp);
