@@ -147,3 +147,22 @@ bitmap *BinReadBitmap(FILE *arq) {
     free(contents);
     return bm;
 }
+
+void TestaArquivos(FILE *a1, FILE *a2){
+    char ch1, ch2;
+    if (!a1 || !a2) {
+        TratarStructNula("testaArquivos", "arquivos");
+    }
+    int result = 1;
+    while (fread(&ch1, sizeof(char), 1, a1) && fread(&ch2, sizeof(char), 1, a2)) {
+        if (ch1 != ch2) {
+            result = 0;
+            break;
+        }
+    }
+    if (result && feof(a1) && feof(a2)) {
+        printf("Teste bem-sucedido: O arquivo descompactado eh igual ao original.\n");
+    } else {
+        printf("Teste falhou: O arquivo descompactado eh diferente do original.\n");
+    }
+}
