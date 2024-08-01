@@ -94,7 +94,7 @@ static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
 
     bitmap* bmDescomp = bitmapInit(UM_MEGA);
 
-    while(index < bitmapGetLength(bm)) {
+    while(index <= bitmapGetLength(bm)) {
         if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
             printf("dump de bitmap descompactado\n");
             BinDumpBitmap(bmDescomp, pathOut);
