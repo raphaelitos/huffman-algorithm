@@ -175,7 +175,6 @@ unsigned char bitmapGetByte(bitmap* bm, unsigned int bitIndex) {
  * Reseta o bitmap (define seu tamanho como 0).
  * @param bm O mapa de bits.
  * @pre Bitmap devidamente alocado.
- */
 void ResetBitmap(bitmap* bm) {
     if(!bm){
         printf("bitmap nulo em reset\n");
@@ -183,6 +182,7 @@ void ResetBitmap(bitmap* bm) {
     }
     bm->length = 0;
 }
+ */
 
 void printMapContents(bitmap *m) {
     if (!m) {

@@ -27,12 +27,12 @@ void Compacta(char *nomeArquivo){
     ImprimeTabela(table);
 
     //colocando a arvore no binario
-    bitmap *bmComp = bitmapInit(UM_MEGA);
+    bitmap *bmComp = bitmapInit(UM_MEGA/2);
     DumpArvoreBitmap(arvHuf, bmComp);
     
     printf("dump de bitmap com a arvore\n");
     BinDumpBitmap(bmComp, pathOut);
-    ResetBitmap(bmComp);
+    bitmapLibera(bmComp);
 
     //Conteudo do arquivo compactado
     FILE *entrada = fopen(nomeArquivo, "rb");
@@ -40,6 +40,7 @@ void Compacta(char *nomeArquivo){
 
     unsigned char byte;
 
+    bmComp = bitmapInit(UM_MEGA);
     while(1){
         size_t bytesRead = fread(&byte, sizeof(unsigned char), 1, entrada);
 
@@ -51,8 +52,9 @@ void Compacta(char *nomeArquivo){
         int max = bitmapGetMaxSize(bmComp);
         int i = 0;
         printf("char lido: %c\n", byte);
+        printf("Tamanho da string: %d\n", tamStr);
 
-        if((tamBm + tamStr) >= max){
+        if((tamBm + tamStr) >= max){ //talvez seja apenas maior que...
             
             for(i = 0; i < (max - tamBm); i++){
                 bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
@@ -61,7 +63,9 @@ void Compacta(char *nomeArquivo){
 
             printf("Dump com bitmap cheio (se tudo estiver certo)\n");
             BinDumpBitmap(bmComp, pathOut);
-            ResetBitmap(bmComp);
+            bitmapLibera(bmComp);
+            bmComp = bitmapInit(UM_MEGA);
+            //ResetBitmap(bmComp);
         }
 
         for(i; i < tamStr; i++){
@@ -87,13 +91,16 @@ static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
     tAb* aux = arvHuf;
     int bit = 0;
     unsigned int index = 0;
+
     bitmap* bmDescomp = bitmapInit(UM_MEGA);
 
     while(index < bitmapGetLength(bm)) {
         if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
             printf("dump de bitmap descompactado\n");
             BinDumpBitmap(bmDescomp, pathOut);
-            ResetBitmap(bmDescomp);
+            bitmapLibera(bmDescomp);
+            bmDescomp = bitmapInit(UM_MEGA);
+            //ResetBitmap(bmDescomp);
         }
         if(ehFolha(aux)) {
             printf("Add byte descomp\n");
@@ -104,6 +111,7 @@ static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
 
         bit = (int)bitmapGetBit(bm, index);
         index++;
+        printf("%d\n", bit);
         if(bit == 0) aux = GetSae(aux);
         else aux = GetSad(aux);
     }
@@ -190,10 +198,10 @@ int main(int argc, char *argv[]) {
     sprintf(compactedPath, "%s%s", inputPath, EXTENSAO);
     char outputPath[] = "teste.txt.out";    
    
-    /*
-    printf("\nComecou a compactar\n");
-    Compacta(inputPath);
-    */
+    
+    //printf("\nComecou a compactar\n");
+    //Compacta(inputPath);
+    
     printf("\nComecou a descompactar\n");
     Descompacta(inputPath);
     /*

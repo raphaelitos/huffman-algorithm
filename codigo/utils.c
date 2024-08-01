@@ -70,6 +70,7 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo){
         fwrite(&tam, sizeof(unsigned int), 1, arq);
     }
 	
+    for(int i = 0; i < qtdBytes; i++) printf("%u ", bitmapGetContents(bm)[i]);
 	fwrite(bitmapGetContents(bm), sizeof(unsigned char), qtdBytes, arq);
 	if(restoBits){
 		unsigned char byte = (unsigned char)0;
@@ -80,6 +81,7 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo){
 		
 		//byte preenchido com os n bits do ultimo byte
 		//do bitmap, caso esse byte nao esteja cheio
+        printf("%u\n", byte);
 		fwrite(&byte, sizeof(unsigned char), 1, arq);
 	}
 	

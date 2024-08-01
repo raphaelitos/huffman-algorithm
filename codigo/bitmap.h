@@ -31,7 +31,7 @@ void bitmapAppendByte(bitmap* bm, unsigned char byte);
 
 unsigned char bitmapGetByte(bitmap* bm, unsigned int bitIndex);
 
-void ResetBitmap(bitmap* bm);
+//void ResetBitmap(bitmap* bm);
 
 void printMapContents(bitmap *m);
 
