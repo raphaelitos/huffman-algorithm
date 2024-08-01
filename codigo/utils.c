@@ -58,7 +58,7 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo, int writeTam){
 	unsigned int qtdBytes = tam / 8;
 	unsigned int restoBits = tam % 8;
 	
-    printf("tamanho do bitmap escrito: %d\n", tam);
+    //printf("tamanho do bitmap escrito: %d\n", tam);
     
     if(writeTam) {
 	    unsigned char c = 's';
@@ -72,7 +72,7 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo, int writeTam){
         }
     }
 	
-    for(int i = 0; i < qtdBytes; i++) printf("%u ", bitmapGetContents(bm)[i]);
+    //for(int i = 0; i < qtdBytes; i++) printf("%u ", bitmapGetContents(bm)[i]);
 	fwrite(bitmapGetContents(bm), sizeof(unsigned char), qtdBytes, arq);
 	if(restoBits){
 		unsigned char byte = (unsigned char)0;
@@ -83,7 +83,7 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo, int writeTam){
 		
 		//byte preenchido com os n bits do ultimo byte
 		//do bitmap, caso esse byte nao esteja cheio
-        printf("%u\n", byte);
+        //printf("%u\n", byte);
 		fwrite(&byte, sizeof(unsigned char), 1, arq);
 	}
 	
@@ -132,7 +132,6 @@ bitmap *BinReadBitmap(FILE *arq) {
     }
     printf("qtdBytes: %d\n", qtdBytes);
     for(unsigned int i = 0; i < qtdBytes; i++) {
-        printf("Teste\n");
         bitmapAppendByte(bm, contents[i]);
     }
 

@@ -4,7 +4,7 @@
 #include "bitmap.h"
 
 #define TAM_ASCII 256
-#define UM_MEGA 1024
+#define UM_MEGA 1048576
 
 #define ESQUERDA '0'
 #define DIREITA '1'

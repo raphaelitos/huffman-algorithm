@@ -24,10 +24,10 @@ void Compacta(char *nomeArquivo){
     PreencheTabelaCodificacao(table, pilha, arvHuf);
     
     printf("Impressao da tabela de codificacao\n");
-    ImprimeTabela(table);
+    //ImprimeTabela(table);
 
     //colocando a arvore no binario
-    bitmap *bmComp = bitmapInit(UM_MEGA/2);
+    bitmap *bmComp = bitmapInit(UM_MEGA);
     DumpArvoreBitmap(arvHuf, bmComp);
     
     printf("dump de bitmap com a arvore\n");
@@ -51,14 +51,14 @@ void Compacta(char *nomeArquivo){
         int tamBm = bitmapGetLength(bmComp);
         int max = bitmapGetMaxSize(bmComp);
         int i = 0;
-        printf("char lido: %c\n", byte);
-        printf("Tamanho da string: %d\n", tamStr);
+        //printf("char lido: %c\n", byte);
+        //printf("Tamanho da string: %d\n", tamStr);
 
-        if((tamBm + tamStr) >= max){ //talvez seja apenas maior que...
+        if((tamBm + tamStr) > max){
             
             for(i = 0; i < (max - tamBm); i++){
                 bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
-                printf("valor do bit add ao bitmap: %d\n", (code[i] - '0'));
+                //printf("valor do bit add ao bitmap: %d\n", (code[i] - '0'));
             }
 
             printf("Dump com bitmap cheio (se tudo estiver certo)\n");
@@ -70,13 +70,13 @@ void Compacta(char *nomeArquivo){
 
         for(i; i < tamStr; i++){
             bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
-            printf("valor do bit add ao bitmap: %d\n", (code[i] - '0'));
+            //printf("valor do bit add ao bitmap: %d\n", (code[i] - '0'));
         }
     }
     printf("Dump de bitmap compactado\n");
     BinDumpBitmap(bmComp, pathOut, 1);
     
-    ImprimeArvore(arvHuf, -1);
+    //ImprimeArvore(arvHuf, -1);
 
     bitmapLibera(bmComp);
     DesalocaTrilha(pilha);
@@ -85,44 +85,6 @@ void Compacta(char *nomeArquivo){
     DesalocaLista(nos);
     free(vet);
     fclose(entrada);
-}
-
-static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
-    tAb* aux = arvHuf;
-    int bit = 0;
-    unsigned int index = 0;
-
-    bitmap* bmDescomp = bitmapInit(UM_MEGA);
-
-    while(index < bitmapGetLength(bm)) {
-        bit = (int)bitmapGetBit(bm, index);
-        printf("%d %d\n", bit, index);
-        index++;
-        if(bit == 0) aux = GetSae(aux);
-        else aux = GetSad(aux);
-
-        if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
-            printf("dump de bitmap descompactado\n");
-            BinDumpBitmap(bmDescomp, pathOut, 0);
-            bitmapLibera(bmDescomp);
-            bmDescomp = bitmapInit(UM_MEGA);
-            //ResetBitmap(bmDescomp);
-        }
-        if(ehFolha(aux)) {
-            printf("Add byte descomp\n");
-            bitmapAppendByte(bmDescomp, getChAb(aux));
-            printf("char encontrado: %c\n", getChAb(aux));
-            aux = arvHuf; //reset da árvore para o próximo caractere
-        }
-    }
-
-    //Salva o ultimo bitmap descompactado se ele nao tiver enchido
-    if (bitmapGetLength(bmDescomp) > 0) {
-        printf("dump do ultimo bitmap descomp\n");
-        BinDumpBitmap(bmDescomp, pathOut, 0);
-    }
-    
-    bitmapLibera(bmDescomp);
 }
 
 void Descompacta(char* nomeArquivoIn) {
@@ -149,6 +111,7 @@ void Descompacta(char* nomeArquivoIn) {
 
     unsigned int index = 0;
     tAb* arvHuf = ReadArvoreBitmap(bm, &index);
+    tAb* aux = arvHuf;
     ImprimeArvore(arvHuf, -1);
     bitmapLibera(bm);
 
@@ -159,8 +122,40 @@ void Descompacta(char* nomeArquivoIn) {
         if(bm == NULL) break;
         printf("bitmap lido\n");
 
-        DescompactaBitmap(bm, pathOut, arvHuf);
+        int bit = 0;
+        unsigned int index = 0;
 
+        bitmap* bmDescomp = bitmapInit(UM_MEGA);
+
+        while(index < bitmapGetLength(bm)) {
+            bit = (int)bitmapGetBit(bm, index);
+            printf("%d %d\n", bit, index);
+            index++;
+            if(bit == 0) aux = GetSae(aux);
+            else aux = GetSad(aux);
+
+            if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
+                printf("dump de bitmap descompactado\n");
+                BinDumpBitmap(bmDescomp, pathOut, 0);
+                bitmapLibera(bmDescomp);
+                bmDescomp = bitmapInit(UM_MEGA);
+                //ResetBitmap(bmDescomp);
+            }
+            if(ehFolha(aux)) {
+                //printf("Add byte descomp\n");
+                bitmapAppendByte(bmDescomp, getChAb(aux));
+                //printf("char encontrado: %c\n", getChAb(aux));
+                aux = arvHuf; //reset da árvore para o próximo caractere
+            }
+        }
+
+        //Salva o ultimo bitmap descompactado se ele nao tiver enchido
+        if (bitmapGetLength(bmDescomp) > 0) {
+            printf("dump do ultimo bitmap descomp\n");
+            BinDumpBitmap(bmDescomp, pathOut, 0);
+        }
+        
+        bitmapLibera(bmDescomp);
         bitmapLibera(bm);
     }
     
