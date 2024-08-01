@@ -94,7 +94,13 @@ static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
 
     bitmap* bmDescomp = bitmapInit(UM_MEGA);
 
-    while(index <= bitmapGetLength(bm)) {
+    while(index < bitmapGetLength(bm)) {
+        bit = (int)bitmapGetBit(bm, index);
+        printf("%d %d\n", bit, index);
+        index++;
+        if(bit == 0) aux = GetSae(aux);
+        else aux = GetSad(aux);
+
         if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
             printf("dump de bitmap descompactado\n");
             BinDumpBitmap(bmDescomp, pathOut);
@@ -108,12 +114,6 @@ static void DescompactaBitmap(bitmap* bm, char* pathOut, tAb* arvHuf) {
             printf("char encontrado: %c\n", getChAb(aux));
             aux = arvHuf; //reset da árvore para o próximo caractere
         }
-
-        bit = (int)bitmapGetBit(bm, index);
-        index++;
-        printf("%d\n", bit);
-        if(bit == 0) aux = GetSae(aux);
-        else aux = GetSad(aux);
     }
 
     //Salva o ultimo bitmap descompactado se ele nao tiver enchido
