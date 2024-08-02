@@ -24,15 +24,26 @@ void TratarStructNula(const char *nomeFuncao, const char *nomeStruct);
 */
 void TratarFalhaAlocacao(const char *nomeStruct);
 
-/**
- * Compara dois termos validos e diz se sao iguais.
-*/
-int EhMesmoTermo(char *str1, char*str2);
-
+/// @brief Inicializa um vetor de inteiros cujo tamanho depende
+/// da constante TAM_ASCII no header
+/// @return o vetor de inteiros inicializado
+/// @pre a constante TAM_ASCII deve existir
 int *IniciaVetAscII();
 
+/// @brief conta a frequencia dos caracteres 
+/// presente no arquivo encontrado em path
+/// e salva no vetor
+/// @param vet um vetor de inteiros 
+/// @param path o caminho para o arquivo
+/// @pre vet estar devidamente alocado 
+/// e ter tamanho suficiente para 
+/// representar o codigo ascii dos caracteres;
+/// path ser um caminho valido de arquivo
 void ContaFreqCaracteres(int *vet, char *path);
 
+/// @brief imprime um vetor de inteiros
+/// @param vet um vetor valido
+/// @param tam o tamanho do vetor
 void PrintVetInt(int *vet, int tam);
 
 /// @brief salva bm num arquivo binario  
