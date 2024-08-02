@@ -45,7 +45,6 @@ void Descompacta(char* nomeArquivoIn) {
 
         while(index < bitmapGetLength(bm)) {
             bit = (int)bitmapGetBit(bm, index);
-            printf("%d %d\n", bit, index);
             index++;
             if(bit == 0) aux = GetSae(aux);
             else aux = GetSad(aux);

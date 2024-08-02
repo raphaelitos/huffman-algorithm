@@ -52,8 +52,6 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo, int writeTam){
 	unsigned int tam = bitmapGetLength(bm);
 	unsigned int qtdBytes = tam / 8;
 	unsigned int restoBits = tam % 8;
-	
-    //printf("tamanho do bitmap escrito: %d\n", tam);
     
     if(writeTam) {
 	    unsigned char c = 's';
@@ -106,7 +104,6 @@ bitmap *BinReadBitmap(FILE *arq) {
         fread(&tam, sizeof(unsigned int), 1, arq);
     }
     
-    printf("tamanho do bitmap lido: %d\n", tam);
     unsigned int qtdBytes = tam / 8;
     unsigned int restoBits = tam % 8;
 
