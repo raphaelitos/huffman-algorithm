@@ -10,13 +10,13 @@ void Descompacta(char* nomeArquivoIn) {
     //Tratando nome do arquivo
     size_t tamIn = strlen(nomeArquivoIn);
     size_t tamExt = strlen(EXTENSAO);
+    size_t tamCpy = tamIn - tamExt;
 
-    if (tamIn <= tamExt || strcmp((nomeArquivoIn + tamIn - tamExt), EXTENSAO)) {
+    if (tamIn <= tamExt || strcmp((nomeArquivoIn + tamCpy), EXTENSAO)) {
         printf("ERRO: O arquivo deve ter a extensao .comp\n");
         return;
     }
 
-    size_t tamCpy = tamIn - tamExt;
     char pathOut[tamCpy + 1];
     strncpy(pathOut, nomeArquivoIn, tamCpy);
     pathOut[tamCpy] = '\0';
@@ -60,7 +60,7 @@ void Descompacta(char* nomeArquivoIn) {
             }
         }
 
-        //Salva o ultimo bitmap descompactado se ele nao tiver enchido
+        //Salva um possivel ultimo bitmap descompactado
         if (bitmapGetLength(bmDescomp) > 0) {
             BinDumpBitmap(bmDescomp, pathOut, 0);
         }

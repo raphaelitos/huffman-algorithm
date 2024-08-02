@@ -65,7 +65,6 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo, int writeTam){
         }
     }
 	
-    //for(int i = 0; i < qtdBytes; i++) printf("%u ", bitmapGetContents(bm)[i]);
 	fwrite(bitmapGetContents(bm), sizeof(unsigned char), qtdBytes, arq);
 	if(restoBits){
 		unsigned char byte = (unsigned char)0;
@@ -76,7 +75,6 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo, int writeTam){
 		
 		//byte preenchido com os n bits do ultimo byte
 		//do bitmap, caso esse byte nao esteja cheio
-        //printf("%u\n", byte);
 		fwrite(&byte, sizeof(unsigned char), 1, arq);
 	}
 	
@@ -94,7 +92,6 @@ bitmap *BinReadBitmap(FILE *arq) {
     size_t bytesRd = fread(&c, sizeof(unsigned char), 1, arq);
 
 	if(bytesRd != 1){
-        printf("fim do arquivo onde o bitmap estava\n");
         return NULL;
     }
     if(c == 'n'){
@@ -122,13 +119,11 @@ bitmap *BinReadBitmap(FILE *arq) {
         TratarFalhaAlocacao("bitmap em readBin");
         return NULL;
     }
-    printf("qtdBytes: %d\n", qtdBytes);
     for(unsigned int i = 0; i < qtdBytes; i++) {
         bitmapAppendByte(bm, contents[i]);
     }
 
     if(restoBits) {
-        printf("entrando no byte quebrado\n");
         unsigned char byte = contents[qtdBytes];
         for(unsigned int b = 0; b < restoBits; b++) {
             unsigned char bit = (byte >> (7 - b)) & 0x01;
