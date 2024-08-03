@@ -24,6 +24,9 @@ void Descompacta(char* nomeArquivoIn) {
     FILE *arqIn = fopen(nomeArquivoIn, "rb");
     if(!arqIn) TratarFalhaAlocacao("arqIn em descompacta");
 
+    FILE *arqOut = fopen(pathOut, "wb");
+    if(!arqOut) TratarFalhaAlocacao("arqOut em descompacta");
+
     //reconstruindo arvore
     bitmap* bm = BinReadBitmap(arqIn);
 
@@ -50,7 +53,7 @@ void Descompacta(char* nomeArquivoIn) {
             else aux = GetSad(aux);
 
             if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
-                BinDumpBitmap(bmDescomp, pathOut, 0);
+                BinDumpBitmap(bmDescomp, arqOut, 0);
                 bitmapLibera(bmDescomp);
                 bmDescomp = bitmapInit(UM_MEGA);
             }
@@ -60,17 +63,17 @@ void Descompacta(char* nomeArquivoIn) {
             }
         }
 
-        //Salva um possivel ultimo bitmap descompactado
         if (bitmapGetLength(bmDescomp) > 0) {
-            BinDumpBitmap(bmDescomp, pathOut, 0);
+            BinDumpBitmap(bmDescomp, arqOut, 0);
         }
         
         bitmapLibera(bmDescomp);
         bitmapLibera(bm);
     }
-    
+    //fim da reconstrucao, liberacao de tudo
     DesalocaaAb(arvHuf);
     fclose(arqIn);
+    fclose(arqOut);
 }
 
 int main(int argc, char *argv[]) {

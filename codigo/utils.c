@@ -42,12 +42,8 @@ void PrintVetInt(int *vet, int tam){
     printf("]\n");
 }
 
-void BinDumpBitmap(bitmap *bm, char *nomeArquivo, int writeTam){
-	if(!bm || !nomeArquivo) TratarStructNula("BinDump", "bitmap ou path");
-	char dest[strlen(nomeArquivo) + 6];
-
-	FILE *arq = fopen(nomeArquivo, "ab");
-	if(!arq)TratarFalhaAlocacao("arquivo do bitmap dump");
+void BinDumpBitmap(bitmap *bm, FILE *arq, int writeTam){
+	if(!bm || !arq) TratarStructNula("BinDump", "bitmap ou arq");
 	
 	unsigned int tam = bitmapGetLength(bm);
 	unsigned int qtdBytes = tam / 8;
@@ -77,8 +73,6 @@ void BinDumpBitmap(bitmap *bm, char *nomeArquivo, int writeTam){
 		//do bitmap, caso esse byte nao esteja cheio
 		fwrite(&byte, sizeof(unsigned char), 1, arq);
 	}
-	
-	fclose(arq);
 }
 
 bitmap *BinReadBitmap(FILE *arq) {

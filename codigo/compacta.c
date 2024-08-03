@@ -12,6 +12,9 @@ void Compacta(char *nomeArquivo){
     char pathOut[strlen(nomeArquivo) + strlen(EXTENSAO) + 2];
     sprintf(pathOut, "%s%s", nomeArquivo, EXTENSAO);
 
+    FILE *saida = fopen(pathOut, "wb");
+    if(!saida)TratarFalhaAlocacao("arqOut compacta");
+
     int *vet = IniciaVetAscII();
     ContaFreqCaracteres(vet, nomeArquivo);
 
@@ -27,7 +30,7 @@ void Compacta(char *nomeArquivo){
     bitmap *bmComp = bitmapInit(UM_MEGA);
     DumpArvoreBitmap(arvHuf, bmComp);
     
-    BinDumpBitmap(bmComp, pathOut, 1);
+    BinDumpBitmap(bmComp, saida, 1);
     bitmapLibera(bmComp);
 
 
@@ -55,7 +58,7 @@ void Compacta(char *nomeArquivo){
                 bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
             }
 
-            BinDumpBitmap(bmComp, pathOut, 1);
+            BinDumpBitmap(bmComp, saida, 1);
             bitmapLibera(bmComp);
             bmComp = bitmapInit(UM_MEGA);
         }
@@ -64,7 +67,7 @@ void Compacta(char *nomeArquivo){
             bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
         }
     }
-    BinDumpBitmap(bmComp, pathOut, 1);
+    BinDumpBitmap(bmComp, saida, 1);
     
     //compactacao finalizada; liberacao das estruturas
     bitmapLibera(bmComp);
@@ -74,6 +77,7 @@ void Compacta(char *nomeArquivo){
     DesalocaLista(nos);
     free(vet);
     fclose(entrada);
+    fclose(saida);
 }
 
 int main(int argc, char *argv[]) {

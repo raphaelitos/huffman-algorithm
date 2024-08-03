@@ -48,7 +48,7 @@ void PrintVetInt(int *vet, int tam);
 
 /// @brief salva bm num arquivo binario  
 /// @param bm um bitmap valido
-/// @param nomeArquivo o nome do arquivo onde bm 
+/// @param arq o  arquivo onde bm 
 /// sera salvo
 /// @param writeTam flag que indica a função se deve
 /// ou nao escrever o tamanho do bitmap
@@ -56,13 +56,17 @@ void PrintVetInt(int *vet, int tam);
 /// @pre o caminho ser valido e o bitmap estar
 /// devidamente alocado na memoria
 /// @post um arquivo .bin nomeado por nomeArquivo
-void BinDumpBitmap(bitmap *bm, char *nomeArquivo, int writeTam);
+void BinDumpBitmap(bitmap *bm, FILE *arq, int writeTam);
 
 /// @brief cria um bitmap a partir de um
-/// arquivo binario
+/// arquivo aberto em modo de leitura em binario
 /// @param arq o arquivo que sera lido
-/// @return o bitmao criado
-/// @pre o caminho levar a um arquivo binario valido
+/// @return o bitmap criado ou null se essa
+/// criacao nao for concretizada
+/// @pre arq deve ser um arquivo valido 
+/// aberto de forma correta
+/// @post um bitmap criado com no ate 1Mb 
+/// de dados do arquivo
 bitmap *BinReadBitmap(FILE *arq);
 
 #endif
