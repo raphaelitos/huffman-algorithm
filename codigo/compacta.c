@@ -33,6 +33,10 @@ void Compacta(char *nomeArquivo){
     BinDumpBitmap(bmComp, saida, 1);
     bitmapLibera(bmComp);
 
+    DesalocaTrilha(pilha);
+    DesalocaaAb(arvHuf);
+    DesalocaLista(nos);
+    free(vet);
 
     //Conteudo do arquivo compactado
     FILE *entrada = fopen(nomeArquivo, "rb");
@@ -71,11 +75,8 @@ void Compacta(char *nomeArquivo){
     
     //compactacao finalizada; liberacao das estruturas
     bitmapLibera(bmComp);
-    DesalocaTrilha(pilha);
     DesalocaTabelaCodificacao(table);
-    DesalocaaAb(arvHuf);
-    DesalocaLista(nos);
-    free(vet);
+
     fclose(entrada);
     fclose(saida);
 }
