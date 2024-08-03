@@ -10,10 +10,6 @@ struct ab{
     unsigned int freq;
 };
 
-static int maior(int a, int b){
-    return (a > b) ? a : b;
-}
-
 int ehFolha(tAb *a){
     if(a){
         return(a->sad == NULL && a->sae == NULL);
@@ -58,18 +54,6 @@ unsigned int getFreqAb(tAb *ab){
 unsigned char getChAb(tAb *ab){
     if(!ab)TratarStructNula("getCh", "ab");
     return ab->ch; 
-}
-
-void ImprimeArvore(tAb *ab, int flag){
-    if(!ab) return;
-    if(ehFolha(ab)){
-        printf("%c ", ab->ch);
-        return;
-    }
-    ImprimeArvore(ab->sae, 1);
-    ImprimeArvore(ab->sad, 0);
-    printf("%d ", flag);
-
 }
 
 void WriteBinAb(tAb* ab, FILE* arq) {

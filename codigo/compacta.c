@@ -81,7 +81,7 @@ void Compacta(char *nomeArquivo){
     fclose(saida);
 }
 
-int main(int argc, char *argv[]) {
+/*int main(int argc, char *argv[]) {
     if (argc <= 1) {
         printf("Caminho para o arquivo não informado. Encerrando o programa.\n");
         return EXIT_FAILURE;
@@ -90,4 +90,4 @@ int main(int argc, char *argv[]) {
     Compacta(argv[1]);
    
     return EXIT_SUCCESS;
-}
+}*/

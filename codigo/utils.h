@@ -46,16 +46,12 @@ void ContaFreqCaracteres(int *vet, char *path);
 /// @param tam o tamanho do vetor
 void PrintVetInt(int *vet, int tam);
 
-/// @brief salva bm num arquivo binario  
+/// @brief salva bm em arq 
 /// @param bm um bitmap valido
-/// @param arq o  arquivo onde bm 
-/// sera salvo
-/// @param writeTam flag que indica a função se deve
-/// ou nao escrever o tamanho do bitmap
-/// 1 para habilitar a escrita e 0 para o contrário
-/// @pre o caminho ser valido e o bitmap estar
-/// devidamente alocado na memoria
-/// @post um arquivo .bin nomeado por nomeArquivo
+/// @param arq um arquivo valido
+/// @pre bm devidamente alocado na memoria e 
+/// arq um arquivo aberto em modo "wb"
+/// @post o conteudo de bm sera escrito em arq
 void BinDumpBitmap(bitmap *bm, FILE *arq);
 
 /// @brief cria um bitmap a partir de um
@@ -64,7 +60,7 @@ void BinDumpBitmap(bitmap *bm, FILE *arq);
 /// @return o bitmap criado ou null se essa
 /// criacao nao for concretizada
 /// @pre arq deve ser um arquivo valido 
-/// aberto de forma correta
+/// aberto em modo "rb"
 /// @post um bitmap criado com no ate 1Mb 
 /// de dados do arquivo
 bitmap *BinReadBitmap(FILE *arq);

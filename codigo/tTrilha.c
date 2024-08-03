@@ -153,20 +153,3 @@ void PreencheTabelaCodificacao(unsigned char** table, tTrilha* t, tAb* ab) {
         PopTrilha(t);
     }
 }
-
-static void ImprimePilha(tTrilha* pilha) {
-    tCelDado* atual = pilha->prim;
-    while (atual) {
-        printf("%c", atual->info);
-        atual = atual->prox;
-    }
-}
-
-void ImprimeTabela(unsigned char** table) {
-    for (int i = 0; i < TAM_ASCII; i++) {
-        if (table[i] != NULL) {
-            printf("Tabela[%c]: ", (char)i);
-            printf("%s\n", table[i]);
-        }
-    }
-}

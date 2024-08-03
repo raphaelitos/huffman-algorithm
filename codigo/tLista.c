@@ -18,6 +18,7 @@ static tCelula *CriaCelula(tAb *ab){
     if(!c)TratarFalhaAlocacao("celula");
     c->ab = ab;
     c->prox = c->ant = NULL;
+    return c;
 }
 
 static void DesalocaCelula(tCelula *c){

@@ -1,6 +1,7 @@
 #ifndef _tAb_H_
 #define _tAb_H_
 
+/// @brief Estrutura para uma arvore binaria
 typedef struct ab tAb;
 
 #include "bitmap.h"
@@ -43,11 +44,6 @@ unsigned int getFreqAb(tAb *ab);
 /// @return o caractere contido em Ab
 unsigned char getChAb(tAb *ab);
 
-/// @brief Imprime uma arvore valida
-/// @param ab ponteiro valido para uma 
-/// variavel do tipo tAb
-void ImprimeArvore(tAb *ab, int flag);
-
 /// @brief Escreve uma arvore binaria em um arquivo binario dado
 /// @param ab 
 /// @param arq 
@@ -73,8 +69,25 @@ tAb* GetSad(tAb* ab);
 /// @return Retorna a arvore criada
 tAb* CriaArvoreHuf(tLista* nos);
 
+/// @brief carrega as informacoes de uma arvore 
+/// binaria para um bitmap
+/// @param ab uma arvore binaria valida
+/// @param bm um bitmap valido
+/// @pre ab e bm devidamente alocados na memoria;
+/// deve haver espaco suficiente em bm para o dump de ab
+/// @post as informacoes de ab estarao em bm caso
+/// haja espaco para isso
 void DumpArvoreBitmap(tAb *ab, bitmap *bm);
 
+/// @brief constroi uma arvore binaria com base
+/// no conteudo do bitmap
+/// @param bm um bitmap valido
+/// @param index um ponteiro de inteiro valido
+/// @return uma arvore binaria construida com 
+/// base no conteudo de bm
+/// @pre bm estar devidamente alocado e index ser um 
+/// indice valido no conteudo de bm
+/// @post uma nova arvore alocada na memoria
 tAb *ReadArvoreBitmap(bitmap *bm, unsigned int* index);
 
 #endif
