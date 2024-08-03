@@ -30,7 +30,7 @@ void Compacta(char *nomeArquivo){
     bitmap *bmComp = bitmapInit(UM_MEGA);
     DumpArvoreBitmap(arvHuf, bmComp);
     
-    BinDumpBitmap(bmComp, saida, 1);
+    BinDumpBitmap(bmComp, saida);
     bitmapLibera(bmComp);
 
     DesalocaTrilha(pilha);
@@ -62,7 +62,7 @@ void Compacta(char *nomeArquivo){
                 bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
             }
 
-            BinDumpBitmap(bmComp, saida, 1);
+            BinDumpBitmap(bmComp, saida);
             bitmapLibera(bmComp);
             bmComp = bitmapInit(UM_MEGA);
         }
@@ -71,7 +71,7 @@ void Compacta(char *nomeArquivo){
             bitmapAppendLeastSignificantBit(bmComp, (code[i] - '0'));
         }
     }
-    BinDumpBitmap(bmComp, saida, 1);
+    BinDumpBitmap(bmComp, saida);
     
     //compactacao finalizada; liberacao das estruturas
     bitmapLibera(bmComp);

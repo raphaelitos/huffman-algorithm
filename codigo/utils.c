@@ -42,23 +42,21 @@ void PrintVetInt(int *vet, int tam){
     printf("]\n");
 }
 
-void BinDumpBitmap(bitmap *bm, FILE *arq, int writeTam){
+void BinDumpBitmap(bitmap *bm, FILE *arq){
 	if(!bm || !arq) TratarStructNula("BinDump", "bitmap ou arq");
 	
 	unsigned int tam = bitmapGetLength(bm);
 	unsigned int qtdBytes = tam / 8;
 	unsigned int restoBits = tam % 8;
     
-    if(writeTam) {
-	    unsigned char c = 's';
-        if(tam == bitmapGetMaxSize(bm)){
-            c = 'n';
-        }
-        fwrite(&c, sizeof(unsigned char), 1, arq);
-        
-        if(tam != bitmapGetMaxSize(bm)){
-            fwrite(&tam, sizeof(unsigned int), 1, arq);
-        }
+    unsigned char c = 's';
+    if(tam == bitmapGetMaxSize(bm)){
+        c = 'n';
+    }
+    fwrite(&c, sizeof(unsigned char), 1, arq);
+    
+    if(tam != bitmapGetMaxSize(bm)){
+        fwrite(&tam, sizeof(unsigned int), 1, arq);
     }
 	
 	fwrite(bitmapGetContents(bm), sizeof(unsigned char), qtdBytes, arq);

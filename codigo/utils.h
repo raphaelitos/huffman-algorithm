@@ -56,7 +56,7 @@ void PrintVetInt(int *vet, int tam);
 /// @pre o caminho ser valido e o bitmap estar
 /// devidamente alocado na memoria
 /// @post um arquivo .bin nomeado por nomeArquivo
-void BinDumpBitmap(bitmap *bm, FILE *arq, int writeTam);
+void BinDumpBitmap(bitmap *bm, FILE *arq);
 
 /// @brief cria um bitmap a partir de um
 /// arquivo aberto em modo de leitura em binario

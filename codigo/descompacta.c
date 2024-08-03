@@ -44,30 +44,19 @@ void Descompacta(char* nomeArquivoIn) {
         int bit = 0;
         unsigned int index = 0;
 
-        bitmap* bmDescomp = bitmapInit(UM_MEGA);
-
         while(index < bitmapGetLength(bm)) {
             bit = (int)bitmapGetBit(bm, index);
             index++;
             if(bit == 0) aux = GetSae(aux);
             else aux = GetSad(aux);
 
-            if(bitmapGetLength(bmDescomp) >= bitmapGetMaxSize(bmDescomp)) {
-                BinDumpBitmap(bmDescomp, arqOut, 0);
-                bitmapLibera(bmDescomp);
-                bmDescomp = bitmapInit(UM_MEGA);
-            }
             if(ehFolha(aux)) {
-                bitmapAppendByte(bmDescomp, getChAb(aux));
+                unsigned char c = getChAb(aux);
+                fwrite(&c, sizeof(unsigned char), 1, arqOut);
                 aux = arvHuf; //reset da árvore para o próximo caractere
             }
         }
-
-        if (bitmapGetLength(bmDescomp) > 0) {
-            BinDumpBitmap(bmDescomp, arqOut, 0);
-        }
         
-        bitmapLibera(bmDescomp);
         bitmapLibera(bm);
     }
     //fim da reconstrucao, liberacao de tudo
