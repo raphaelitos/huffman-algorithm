@@ -1,3 +1,8 @@
+/** Define umUm TAD pensado para suprir demandas mais gerais do projeto.
+ * @file utils.c
+ * @author Conrado Antoniazi dos Santos (conradoantoniazi@gmail.com) e Raphael Correia Dornelas (dornelasrapha@gmail.com)
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

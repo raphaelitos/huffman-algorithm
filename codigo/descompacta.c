@@ -1,3 +1,8 @@
+/** Função principal para a descompactação de arquivos.
+ * @file descompacta.c
+ * @author Conrado Antoniazi dos Santos (conradoantoniazi@gmail.com) e Raphael Correia Dornelas (dornelasrapha@gmail.com)
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

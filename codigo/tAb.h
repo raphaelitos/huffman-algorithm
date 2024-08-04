@@ -1,3 +1,8 @@
+/** Define um TAD representando uma árvore binária de um caracter e sua frequência.
+ * @file tAb.h
+ * @author Conrado Antoniazi dos Santos (conradoantoniazi@gmail.com) e Raphael Correia Dornelas (dornelasrapha@gmail.com)
+ */
+
 #ifndef _tAb_H_
 #define _tAb_H_
 

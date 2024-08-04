@@ -1,3 +1,8 @@
+/** Define um TAD representando uma lista duplamente encadeada de árvores binárias.
+ * @file tLista.h
+ * @author Conrado Antoniazi dos Santos (conradoantoniazi@gmail.com) e Raphael Correia Dornelas (dornelasrapha@gmail.com)
+ */
+
 #ifndef _TLISTA_H_
 #define _TLISTA_H_
 

@@ -1,3 +1,8 @@
+/** Define um TAD representando uma pilha duplamente encadeada de unsigned char, representando um bit.
+ * @file tTrilha.h
+ * @author Conrado Antoniazi dos Santos (conradoantoniazi@gmail.com) e Raphael Correia Dornelas (dornelasrapha@gmail.com)
+ */
+
 #ifndef _TLISTADADOS_H_
 #define _TLISTADADOS_H_
 

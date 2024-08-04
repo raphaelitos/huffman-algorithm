@@ -1,3 +1,8 @@
+/** Define umUm TAD pensado para suprir demandas mais gerais do projeto.
+ * @file utils.h
+ * @author Conrado Antoniazi dos Santos (conradoantoniazi@gmail.com) e Raphael Correia Dornelas (dornelasrapha@gmail.com)
+ */
+
 #ifndef UTILS_H_
 #define UTILS_H_
 
