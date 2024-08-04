@@ -56,34 +56,6 @@ unsigned char getChAb(tAb *ab){
     return ab->ch; 
 }
 
-void WriteBinAb(tAb* ab, FILE* arq) {
-    if (!ab)TratarStructNula("WriteBinStructAb", "tAb");
-
-    fwrite(&ab->ch, sizeof(unsigned char), 1, arq);
-    fwrite(&ab->freq, sizeof(unsigned int), 1, arq);
-
-    if (ab->ch == '\0') {
-        WriteBinAb(ab->sae, arq);
-        WriteBinAb(ab->sad, arq);
-    }
-}
-
-tAb* ReadBinAb(FILE* arq) {
-    unsigned char charAux;
-    fread(&charAux, sizeof(unsigned char), 1, arq);
-    int freqAux;
-    fread(&freqAux, sizeof(unsigned int), 1, arq);
-
-    tAb* ab = CriaAb(charAux, freqAux, NULL, NULL);
-
-    if (ab->ch == '\0') {
-        ab->sae = ReadBinAb(arq);
-        ab->sad = ReadBinAb(arq);
-    }
-
-    return ab;
-}
-
 tAb* GetSae(tAb* ab) {
     return ab->sae;
 }

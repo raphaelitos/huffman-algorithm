@@ -44,16 +44,6 @@ unsigned int getFreqAb(tAb *ab);
 /// @return o caractere contido em Ab
 unsigned char getChAb(tAb *ab);
 
-/// @brief Escreve uma arvore binaria em um arquivo binario dado
-/// @param ab 
-/// @param arq 
-void WriteBinAb(tAb* ab, FILE* arq);
-
-/// @brief Le uma arvore binaria de um arquivo binario dado
-/// @param arq 
-/// @return Retorna uma arvore lida e alocada dinamicamente
-tAb* ReadBinAb(FILE* arq);
-
 /// @brief  Obtem o ponteiro para a subarvore da esquerda de uma arvore valida
 /// @param ab 
 /// @return Subarvore da esquerda

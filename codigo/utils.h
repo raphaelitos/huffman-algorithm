@@ -39,12 +39,9 @@ int *IniciaVetAscII();
 /// e ter tamanho suficiente para 
 /// representar o codigo ascii dos caracteres;
 /// path ser um caminho valido de arquivo
+/// @post o conteudo de vet modificado de acordo
+/// com as frequencias contabilizadas
 void ContaFreqCaracteres(int *vet, char *path);
-
-/// @brief imprime um vetor de inteiros
-/// @param vet um vetor valido
-/// @param tam o tamanho do vetor
-void PrintVetInt(int *vet, int tam);
 
 /// @brief salva bm em arq 
 /// @param bm um bitmap valido

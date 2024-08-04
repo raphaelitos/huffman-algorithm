@@ -21,6 +21,15 @@ void Compacta(char *nomeArquivo){
     tLista *nos = CriaListaNos(vet);
     tAb *arvHuf = CriaArvoreHuf(nos);
 
+    if(!arvHuf){//arquivo vazio
+        DesalocaaAb(arvHuf);
+        DesalocaLista(nos);
+        free(vet);
+        fclose(saida);
+
+        return;
+    }
+
     tTrilha *pilha = CriaTrilha();
     unsigned char **table = CriaTabelaCodificacao();
     PreencheTabelaCodificacao(table, pilha, arvHuf);
@@ -81,7 +90,7 @@ void Compacta(char *nomeArquivo){
     fclose(saida);
 }
 
-/*int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
     if (argc <= 1) {
         printf("Caminho para o arquivo não informado. Encerrando o programa.\n");
         return EXIT_FAILURE;
@@ -90,4 +99,4 @@ void Compacta(char *nomeArquivo){
     Compacta(argv[1]);
    
     return EXIT_SUCCESS;
-}*/
+}

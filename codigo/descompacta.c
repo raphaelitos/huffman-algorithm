@@ -30,6 +30,12 @@ void Descompacta(char* nomeArquivoIn) {
     //reconstruindo arvore
     bitmap* bm = BinReadBitmap(arqIn);
 
+    if(!bm){//arquivo vazio
+        fclose(arqIn);
+        fclose(arqOut);
+        return;
+    }
+
     unsigned int index = 0;
     tAb* arvHuf = ReadArvoreBitmap(bm, &index);
     tAb* aux = arvHuf;

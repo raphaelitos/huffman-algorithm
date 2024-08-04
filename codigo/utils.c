@@ -31,17 +31,6 @@ void ContaFreqCaracteres(int *vet, char *path){
     fclose(arq);
 }
 
-void PrintVetInt(int *vet, int tam){
-    if(!vet) return;
-    printf("[ ");
-    for(int i = 0; i < tam; i++){
-        if(vet[i]){
-            printf("%c ", (unsigned char)i);
-        }
-    }
-    printf("]\n");
-}
-
 void BinDumpBitmap(bitmap *bm, FILE *arq){
 	if(!bm || !arq) TratarStructNula("BinDump", "bitmap ou arq");
 	
