@@ -102,6 +102,8 @@ int main(int argc, char *argv[]) {
     }
     
     Compacta(argv[1]);
+
+    printf("teste\n");
    
     return EXIT_SUCCESS;
 }
